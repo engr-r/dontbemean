@@ -824,7 +824,17 @@ function switchPhase() {
         document.getElementById('timeDisplay').style.color = 'var(--accent-emerald)';
     }
     cycleLabel.textContent = isStudyPhase ? `Cycle ${cycleCount + 1}` : `Rest after cycle ${cycleCount}`;
-    updateDisplay(); beep(isStudyPhase ? 650 : 850); saveTimerState();
+    updateDisplay(); 
+    beep(isStudyPhase ? 650 : 850); 
+    
+    if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(isStudyPhase ? "Study Phase Started" : "Break Time!", {
+            body: isStudyPhase ? "Time to focus." : "Take a breather.",
+            requireInteraction: true
+        });
+    }
+    
+    saveTimerState();
 }
 
 
@@ -841,6 +851,9 @@ function startTimer() {
     if (audioCtx.state === 'suspended') {
         audioCtx.resume();
     }
+    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
 
     document.getElementById('btnStart').style.display = 'none'; 
     document.getElementById('btnPause').style.display = ''; 
@@ -852,20 +865,24 @@ function startTimer() {
 
 // --- 3. UPDATE YOUR BEEP FUNCTION ---
 function beep(freq) {
-    if (!audioCtx) return; // Failsafe if context didn't initialize
+    if (!audioCtx) return; 
     try {
-        const osc = audioCtx.createOscillator(); 
-        const gain = audioCtx.createGain();
-        osc.connect(gain); 
-        gain.connect(audioCtx.destination); 
-        osc.frequency.value = freq;
-        
-        // Clean audio generation envelope
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime); 
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-        
-        osc.start(); 
-        osc.stop(audioCtx.currentTime + 0.4);
+        for (let i = 0; i < 3; i++) {
+            const osc = audioCtx.createOscillator(); 
+            const gain = audioCtx.createGain();
+            osc.connect(gain); 
+            gain.connect(audioCtx.destination); 
+            osc.type = 'square'; // Harsher alarm sound
+            osc.frequency.value = freq;
+            
+            const startTime = audioCtx.currentTime + (i * 0.35); // Pulse every 350ms
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(0.6, startTime + 0.05); // Louder peak
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+            
+            osc.start(startTime); 
+            osc.stop(startTime + 0.3);
+        }
     } catch(e) { 
         console.error("Audio playback error:", e); 
     }
