@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECE Board Exam Tracker</title>
@@ -9,6 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
+
         .performance-layer { content-visibility: auto; contain-intrinsic-size: 100px 500px; }
         #examMainArea, .overflow-y-auto { will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
         
@@ -233,6 +235,40 @@
             font-size: 1.1rem;
         }
         .icon-btn-raw:hover { color: var(--text-primary); }
+        /* Notes Tooltip Styles */
+        .glass-panel { background: var(--bg-glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        /* Notes Tooltip & Markdown Styles */
+        #notesTooltip {
+            position: absolute;
+            z-index: 9999;
+            display: none;
+            pointer-events: none;
+            max-width: 550px; /* Widened for tables */
+            padding: 20px;
+            border: 1px solid var(--border-highlight);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            transition: opacity 0.1s;
+        }
+        
+        /* Rendered Markdown Styling */
+        #notesTooltip h3 { color: var(--blue-bright); font-size: 1.1rem; font-weight: 600; margin-top: 12px; margin-bottom: 8px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px; }
+        #notesTooltip p { margin-bottom: 10px; line-height: 1.5; color: var(--text-secondary); }
+        #notesTooltip strong { color: var(--text-primary); font-weight: 700; }
+        #notesTooltip ul { list-style-type: disc; padding-left: 20px; margin-bottom: 12px; color: var(--text-secondary); }
+        #notesTooltip li { margin-bottom: 4px; }
+        
+        /* Rendered Table Styling */
+        #notesTooltip table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.8rem; background: rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
+        #notesTooltip th, #notesTooltip td { border: 1px solid var(--border-subtle); padding: 8px 12px; text-align: left; }
+        #notesTooltip th { background: rgba(255,255,255,0.05); color: var(--accent-cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; }
+        #notesTooltip tr:nth-child(even) { background: rgba(255,255,255,0.01); }
+        
+        /* Math/Formula Styling */
+        #notesTooltip code { font-family: 'JetBrains Mono', monospace; background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 4px; color: var(--accent-amber); font-size: 0.8rem; }
+        #notesTooltip hr { border: 0; height: 1px; background: var(--border-subtle); margin: 16px 0; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -600,6 +636,71 @@
 </div>
 
 <script>
+    // ─── HOVER NOTES TOOLTIP LOGIC ────────────────────────────────────────────────
+let notesAbortController = null;
+
+async function showNotesTooltip(e, subject, course, topic) {
+    const tooltip = document.getElementById('notesTooltip');
+    tooltip.innerHTML = '<span class="muted-data"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading notes...</span>';
+    tooltip.style.display = 'block';
+    moveNotesTooltip(e); 
+
+    // 1. Determine Field Code
+    const subjectMap = { 'Mathematics': 'math', 'Electronics': 'elecs', 'GEAS': 'geas', 'EST': 'est' };
+    const fieldCode = subjectMap[subject] || 'uknw';
+    
+    // 2. Extract Course Number (e.g., gets "4" from "4.0 Electronic Devices")
+    const courseNum = (course.match(/^\d+/) || [''])[0]; 
+    
+    // 3. Find Topic Index (1st, 2nd, 3rd topic within that specific course)
+    const courseTopics = progressData.filter(d => d.course === course);
+    const topicIndex = courseTopics.findIndex(d => d.topic === topic) + 1; // +1 to make it 1-based instead of 0-based
+    
+    // 4. Construct Final Filename
+    const fileName = `${fieldCode}${courseNum}${topicIndex}.txt`;
+
+    // Abort previous fetch if hovering quickly to prevent lag
+    if (notesAbortController) notesAbortController.abort();
+    notesAbortController = new AbortController();
+
+    try {
+        const res = await fetch(`./notes/${fileName}`, { signal: notesAbortController.signal });
+        if (!res.ok) throw new Error('Not found');
+        
+        const rawMarkdown = await res.text();
+        tooltip.innerHTML = marked.parse(rawMarkdown);
+        
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            // Displays the exact filename it tried to find to help you troubleshoot!
+            tooltip.innerHTML = `<span class="muted-data"><i class="fa-solid fa-file-circle-xmark mr-2"></i>Missing: ${fileName}</span>`;
+        }
+    }
+}
+
+function moveNotesTooltip(e) {
+    const tooltip = document.getElementById('notesTooltip');
+    if (tooltip.style.display !== 'block') return;
+    
+    // 15px offset so the cursor doesn't block the tooltip text
+    let x = e.pageX + 15;
+    let y = e.pageY + 15;
+    
+    // Keep the tooltip inside the window bounds
+    const rect = tooltip.getBoundingClientRect();
+    if (x + rect.width > window.innerWidth) x = e.pageX - rect.width - 15;
+    if (y + rect.height > window.innerHeight + window.scrollY) y = e.pageY - rect.height - 15;
+    
+    tooltip.style.left = `${x}px`;
+    tooltip.style.top = `${y}px`;
+}
+
+function hideNotesTooltip() {
+    if (notesAbortController) notesAbortController.abort();
+    const tooltip = document.getElementById('notesTooltip');
+    tooltip.style.display = 'none';
+    tooltip.innerHTML = '';
+}
 // ─── INDEXEDDB SETUP ─────────────────────────────────────────────
 const DB_NAME = "ECEExamDB"; const DB_VERSION = 1; let examDB;
 function initIndexedDB() {
@@ -852,7 +953,11 @@ function startTimer() {
         audioCtx.resume();
     }
     if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-        Notification.requestPermission();
+        // Check our own storage lock first
+        if (!localStorage.getItem('eceNotifAsked')) {
+            localStorage.setItem('eceNotifAsked', 'true'); // Lock it immediately
+            Notification.requestPermission();
+        }
     }
 
     document.getElementById('btnStart').style.display = 'none'; 
@@ -1063,6 +1168,11 @@ function renderProgress() {
         const tr = document.createElement('tr');
         
         if (isSmartSortActive && index < 5) tr.classList.add('smart-focus-row');
+        
+        // Add Hover Event Listeners for Notes Tooltip
+        tr.onmouseenter = (e) => showNotesTooltip(e, row.subject, row.course, row.topic);
+        tr.onmousemove = (e) => moveNotesTooltip(e);
+        tr.onmouseleave = hideNotesTooltip;
         
         tr.innerHTML = `
             <td style="border-right:1px solid var(--border-subtle);"><span class="subject-label ${getSubjectStyle(row.subject)}">${row.subject}</span></td>
@@ -1372,5 +1482,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderAvailableExams(); switchTab(localStorage.getItem('eceActiveTab') || 'dashboard');
 });
 </script>
+<div id="notesTooltip" class="glass-panel"></div>
 </body>
 </html>
