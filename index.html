@@ -2,6 +2,21 @@
 <html lang="en">
 <head>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      chtml: {
+        fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECE Board Exam Tracker</title>
@@ -235,40 +250,87 @@
             font-size: 1.1rem;
         }
         .icon-btn-raw:hover { color: var(--text-primary); }
-        /* Notes Tooltip Styles */
-        .glass-panel { background: var(--bg-glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-        /* Notes Tooltip & Markdown Styles */
-        #notesTooltip {
-            position: absolute;
-            z-index: 9999;
-            display: none;
-            pointer-events: none;
-            max-width: 550px; /* Widened for tables */
-            padding: 20px;
-            border: 1px solid var(--border-highlight);
-            border-radius: 12px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
-            color: var(--text-primary);
-            font-size: 0.85rem;
-            transition: opacity 0.1s;
+        /* ─── SCIENTIFIC STUDY COLOR GRADING ─── */
+        
+        /* Modal Base Colors */
+        #notesModalOverlay { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        .study-modal-bg { background-color: #151821 !important; /* Soft charcoal to prevent astigmatism halation */ border: 1px solid rgba(255,255,255,0.05); }
+        .study-header-bg { background-color: #11131a !important; }
+        .study-text-heading { color: #e2e8f0; }
+        .study-text-sub { color: #64748b; }
+        
+        .notes-content-box {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 1.1rem; 
+            color: #d1d5db; /* Off-white base text to reduce glare */
         }
         
-        /* Rendered Markdown Styling */
-        #notesTooltip h3 { color: var(--blue-bright); font-size: 1.1rem; font-weight: 600; margin-top: 12px; margin-bottom: 8px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px; }
-        #notesTooltip p { margin-bottom: 10px; line-height: 1.5; color: var(--text-secondary); }
-        #notesTooltip strong { color: var(--text-primary); font-weight: 700; }
-        #notesTooltip ul { list-style-type: disc; padding-left: 20px; margin-bottom: 12px; color: var(--text-secondary); }
-        #notesTooltip li { margin-bottom: 4px; }
+        /* Typography Hierarchy */
+        .notes-content-box h1, .notes-content-box h2, .notes-content-box h3 { 
+            color: #7dd3fc; /* Calming soft blue for logical segmentation */
+            font-weight: 600; margin-top: 32px; margin-bottom: 16px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; line-height: 1.3; 
+        }
+        .notes-content-box h1 { font-size: 2rem; }
+        .notes-content-box h2 { font-size: 1.75rem; }
+        .notes-content-box h3 { font-size: 1.4rem; }
         
-        /* Rendered Table Styling */
-        #notesTooltip table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.8rem; background: rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        #notesTooltip th, #notesTooltip td { border: 1px solid var(--border-subtle); padding: 8px 12px; text-align: left; }
-        #notesTooltip th { background: rgba(255,255,255,0.05); color: var(--accent-cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; }
-        #notesTooltip tr:nth-child(even) { background: rgba(255,255,255,0.01); }
+        .notes-content-box p { 
+            margin-bottom: 24px; line-height: 1.8; letter-spacing: 0.01em; 
+        }
         
-        /* Math/Formula Styling */
-        #notesTooltip code { font-family: 'JetBrains Mono', monospace; background: rgba(255,255,255,0.1); padding: 2px 4px; border-radius: 4px; color: var(--accent-amber); font-size: 0.8rem; }
-        #notesTooltip hr { border: 0; height: 1px; background: var(--border-subtle); margin: 16px 0; }
+        /* Memory & Recall Triggers */
+        .notes-content-box strong { 
+            color: #fde047; /* Amber/Yellow wavelength specifically targets retention */
+            font-weight: 600; 
+            background: rgba(253, 224, 71, 0.05); /* Very subtle highlight */
+            padding: 0 2px; border-radius: 3px;
+        }
+        
+        /* Lists */
+        .notes-content-box ul, .notes-content-box ol { 
+            list-style-position: outside; margin-left: 24px; margin-bottom: 28px; line-height: 1.8; 
+        }
+        .notes-content-box ul { list-style-type: disc; }
+        .notes-content-box ol { list-style-type: decimal; }
+        .notes-content-box li { margin-bottom: 12px; padding-left: 8px; }
+        .notes-content-box li::marker { color: #64748b; /* Mutes bullet points to reduce visual clutter */ }
+        
+        /* Data Grouping (Tables) */
+        .notes-content-box table { 
+            width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 1.05rem; 
+            background: #1a1e29; /* Slightly elevated background */
+            border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .notes-content-box th, .notes-content-box td { 
+            border: 1px solid rgba(255,255,255,0.03); padding: 16px 20px; text-align: left; line-height: 1.6; 
+        }
+        .notes-content-box th { 
+            background: #1f2430; color: #5eead4; /* Teal headers to distinctively separate concepts */
+            font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.9rem; 
+        }
+        .notes-content-box tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+        
+        /* Technical Elements */
+        .notes-content-box code { 
+            font-family: 'JetBrains Mono', monospace; background: #1f2430; 
+            padding: 4px 8px; border-radius: 6px; color: #fca5a5; /* Soft red/coral for inline variables/code */
+            font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .notes-content-box blockquote { 
+            border-left: 4px solid #818cf8; margin: 24px 0; 
+            color: #94a3b8; font-style: italic; background: rgba(129, 140, 248, 0.05); 
+            padding: 16px 20px; border-radius: 0 8px 8px 0; 
+        }
+        
+        .notes-content-box hr { border: 0; height: 1px; background: rgba(255,255,255,0.05); margin: 40px 0; }
+        
+        /* Force inline math to stay on the same line */
+        mjx-container:not([display="true"]) {
+            display: inline-block !important;
+            margin: 0 !important;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -639,67 +701,69 @@
     // ─── HOVER NOTES TOOLTIP LOGIC ────────────────────────────────────────────────
 let notesAbortController = null;
 
-async function showNotesTooltip(e, subject, course, topic) {
-    const tooltip = document.getElementById('notesTooltip');
-    tooltip.innerHTML = '<span class="muted-data"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading notes...</span>';
-    tooltip.style.display = 'block';
-    moveNotesTooltip(e); 
+// ─── CLICK-TO-READ NOTES & MATHJAX LOGIC ──────────────────────────────────────
 
-    // 1. Determine Field Code
+function showToast(message) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>${message}</span>`;
+    container.appendChild(toast);
+    
+    // Automatically fade out and remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 400); // Wait for fade animation to end
+    }, 3000);
+}
+
+async function openNotesModal(subject, course, topic) {
+    // Determine Filename (e.g., elecs41.txt)
     const subjectMap = { 'Mathematics': 'math', 'Electronics': 'elecs', 'GEAS': 'geas', 'EST': 'est' };
     const fieldCode = subjectMap[subject] || 'uknw';
-    
-    // 2. Extract Course Number (e.g., gets "4" from "4.0 Electronic Devices")
     const courseNum = (course.match(/^\d+/) || [''])[0]; 
-    
-    // 3. Find Topic Index (1st, 2nd, 3rd topic within that specific course)
     const courseTopics = progressData.filter(d => d.course === course);
-    const topicIndex = courseTopics.findIndex(d => d.topic === topic) + 1; // +1 to make it 1-based instead of 0-based
-    
-    // 4. Construct Final Filename
+    const topicIndex = courseTopics.findIndex(d => d.topic === topic) + 1; 
     const fileName = `${fieldCode}${courseNum}${topicIndex}.txt`;
 
-    // Abort previous fetch if hovering quickly to prevent lag
-    if (notesAbortController) notesAbortController.abort();
-    notesAbortController = new AbortController();
-
     try {
-        const res = await fetch(`./notes/${fileName}`, { signal: notesAbortController.signal });
+        const res = await fetch(`./notes/${fileName}`);
         if (!res.ok) throw new Error('Not found');
         
         const rawMarkdown = await res.text();
-        tooltip.innerHTML = marked.parse(rawMarkdown);
+        
+        // 1. Prepare Modal UI
+        document.getElementById('notesModalTitle').textContent = topic;
+        document.getElementById('notesModalSubtitle').textContent = course;
+        const contentBox = document.getElementById('notesModalContent');
+        
+        // 2. Parse Markdown to HTML
+        contentBox.innerHTML = marked.parse(rawMarkdown);
+        
+        // 3. Command MathJax to render LaTeX equations
+        if (window.MathJax) {
+            MathJax.typesetPromise([contentBox]).catch(function (err) {
+                console.error('MathJax error: ', err.message);
+            });
+        }
+
+        // 4. Open Modal and Lock Background Scrolling
+        document.getElementById('notesModalOverlay').classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; 
         
     } catch (err) {
-        if (err.name !== 'AbortError') {
-            // Displays the exact filename it tried to find to help you troubleshoot!
-            tooltip.innerHTML = `<span class="muted-data"><i class="fa-solid fa-file-circle-xmark mr-2"></i>Missing: ${fileName}</span>`;
-        }
+        // Silently pop up a subtle toast instead of breaking flow
+        showToast(`Missing file: ${fileName}`);
     }
 }
 
-function moveNotesTooltip(e) {
-    const tooltip = document.getElementById('notesTooltip');
-    if (tooltip.style.display !== 'block') return;
+function closeNotesModal(e) {
+    // If an event is passed, check if the user clicked the dark overlay, not the white box
+    if (e && e.target.id !== 'notesModalOverlay') return;
     
-    // 15px offset so the cursor doesn't block the tooltip text
-    let x = e.pageX + 15;
-    let y = e.pageY + 15;
-    
-    // Keep the tooltip inside the window bounds
-    const rect = tooltip.getBoundingClientRect();
-    if (x + rect.width > window.innerWidth) x = e.pageX - rect.width - 15;
-    if (y + rect.height > window.innerHeight + window.scrollY) y = e.pageY - rect.height - 15;
-    
-    tooltip.style.left = `${x}px`;
-    tooltip.style.top = `${y}px`;
-}
-
-function hideNotesTooltip() {
-    if (notesAbortController) notesAbortController.abort();
-    const tooltip = document.getElementById('notesTooltip');
-    tooltip.style.display = 'none';
-    tooltip.innerHTML = '';
+    document.getElementById('notesModalOverlay').classList.add('hidden');
+    document.getElementById('notesModalContent').innerHTML = ''; // Free memory
+    document.body.style.overflow = ''; // Unlock Background Scrolling
 }
 // ─── INDEXEDDB SETUP ─────────────────────────────────────────────
 const DB_NAME = "ECEExamDB"; const DB_VERSION = 1; let examDB;
@@ -1169,18 +1233,16 @@ function renderProgress() {
         
         if (isSmartSortActive && index < 5) tr.classList.add('smart-focus-row');
         
-        // Add Hover Event Listeners for Notes Tooltip
-        tr.onmouseenter = (e) => showNotesTooltip(e, row.subject, row.course, row.topic);
-        tr.onmousemove = (e) => moveNotesTooltip(e);
-        tr.onmouseleave = hideNotesTooltip;
-        
         tr.innerHTML = `
             <td style="border-right:1px solid var(--border-subtle);"><span class="subject-label ${getSubjectStyle(row.subject)}">${row.subject}</span></td>
             <td style="color:var(--text-primary);font-weight:500;font-size:0.85rem;border-right:1px solid var(--border-subtle);">${row.course}</td>
             <td style="color:var(--text-secondary);font-size:0.85rem;line-height:1.4;border-right:1px solid var(--border-subtle);">
                 <div class="flex items-center justify-between gap-4">
-                    <span>${row.topic}</span>
-                    ${isSmartSortActive && index < 5 ? `<button onclick="switchTab('pomodoro'); resetTimer(); startTimer();" title="Focus on this topic" class="w-8 h-8 shrink-0 rounded flex items-center justify-center border border-white/10 text-white/40 bg-black/20 hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/40 transition-all"><i class="fa-solid fa-play text-xs relative left-[1px]"></i></button>` : ''}
+                    <span onclick="openNotesModal('${row.subject}', '${row.course}', '${row.topic}')" class="cursor-pointer hover:text-blue-400 hover:underline transition-colors duration-200">${row.topic}</span>
+                    
+                    <div class="flex items-center gap-2">
+                        ${isSmartSortActive && index < 5 ? `<button onclick="switchTab('pomodoro'); resetTimer(); startTimer();" title="Focus on this topic" class="w-8 h-8 shrink-0 rounded flex items-center justify-center border border-white/10 text-white/40 bg-black/20 hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/40 transition-all"><i class="fa-solid fa-play text-xs relative left-[1px]"></i></button>` : ''}
+                    </div>
                 </div>
             </td>
             <td style="text-align:center;">
@@ -1482,6 +1544,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderAvailableExams(); switchTab(localStorage.getItem('eceActiveTab') || 'dashboard');
 });
 </script>
-<div id="notesTooltip" class="glass-panel"></div>
+<div id="notesModalOverlay" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center transition-all p-4 md:p-6" onclick="closeNotesModal(event)">
+    <div class="card p-0 w-full max-w-5xl mx-auto flex flex-col max-h-[90vh] h-full overflow-hidden shadow-2xl study-modal-bg" onclick="event.stopPropagation()">
+        
+        <div class="p-4 md:px-8 md:py-4 border-b border-white/5 flex justify-between items-center shrink-0 study-header-bg">
+            <div class="pr-4">
+                <h3 class="text-lg md:text-xl font-bold tracking-tight leading-tight study-text-heading" id="notesModalTitle">Topic Notes</h3>
+                <p class="text-[0.7rem] mt-0.5 font-semibold tracking-widest uppercase study-text-sub" id="notesModalSubtitle">Course Name</p>
+            </div>
+            <button onclick="closeNotesModal()" class="text-white/30 hover:text-white p-2 rounded-lg hover:bg-white/5 transition-all shrink-0">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="p-5 md:p-8 md:pt-6 flex-1 overflow-y-auto no-scrollbar notes-content-box" id="notesModalContent">
+            </div>
+        
+    </div>
+</div>
+
+<div id="toastContainer"></div>
 </body>
 </html>
