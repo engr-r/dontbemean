@@ -1,0 +1,179 @@
+### **1. Knowledge (Recall & Facts)**
+
+**Definitions:**
+
+* **Time Value of Money:** Core principle; a unit of currency today is worth more than the same unit tomorrow due to earning potential.
+* **Economic Equivalence:** Different sums of money at different times having equal economic value at a specific interest rate.
+* **Principal ($P$):** Initial amount of money invested or borrowed.
+* **Interest ($I$):** Compensation paid for the use of borrowed capital.
+* **Cash Flow:** Stream of monetary receipts (inflows) and disbursements (outflows).
+* **Sunk Cost:** Past cost; unrecoverable, completely **irrelevant** to future economic engineering decisions.
+* **Opportunity Cost:** Potential benefit sacrificed when choosing one alternative over another.
+* **Minimum Attractive Rate of Return (MARR):** Lowest acceptable return on investment; hurdle rate.
+* **Annuity:** Series of equal payments occurring at equal time intervals.
+* **Capitalized Cost:** Present worth of a project with an infinite lifespan (perpetuity).
+* **Risk:** Outcomes have known probabilities.
+* **Uncertainty:** Outcomes have unknown probabilities.
+
+**Critical Numbers:**
+
+* **Ordinary Simple Interest:** Base year = **360 days** (12 months of 30 days).
+* **Exact Simple Interest:** Base year = **365 days** (or 366 for leap years).
+* **Rule of 72:** Approximate years to double investment = $72 / i\%$ (where $i$ is interest rate in percent).
+* **Typical Corporate MARR:** 10% to 25% (depending on cost of capital and risk).
+* **Laplace Criterion Probability:** $1/n$ (where $n$ = number of possible states/outcomes).
+
+**Standards & Protocols:**
+
+* **GAAP (Generally Accepted Accounting Principles):** US accounting standard governing financial reporting and asset depreciation.
+* **IFRS (International Financial Reporting Standards):** Global accounting standard.
+* **MACRS (Modified Accelerated Cost Recovery System):** Standard US tax depreciation system.
+* **ISO 31000:** International standard for risk management principles and guidelines.
+
+---
+
+### **2. Comprehension (Concepts & Relationships)**
+
+**Visual Interpretation:**
+
+* **Cash Flow Diagram (CFD):** Horizontal line = time timeline. **Upward arrows** = positive cash flow (receipts/savings). **Downward arrows** = negative cash flow (costs/disbursements). Length of arrow $\propto$ magnitude.
+* **Present Worth (PW) Profile Curve:** Graph of PW (Y-axis) vs. Interest Rate (X-axis). Downward sloping. X-intercept = **Internal Rate of Return (IRR)**.
+* **Decision Tree Diagram:** **Squares** = Decision nodes (manager chooses). **Circles** = Chance nodes (nature/probability dictates outcome). Branches = alternative paths.
+
+**Pros vs. Cons:**
+
+| Economy Study Method | Pros | Cons |
+| --- | --- | --- |
+| **Present Worth (PW)** | Easily compares equivalents at time zero; handles varying cash flows. | Requires equal project lives for strict comparison (LCM method). |
+| **Annual Worth (AW)** | Automatically accounts for unequal project lives. | Harder to conceptualize absolute total profit. |
+| **Internal Rate of Return (IRR)** | Yields a percentage; easy to compare against MARR. | Can yield multiple IRRs if cash flow signs change >1 time. |
+| **Payback Period** | Simple; assesses liquidity and early risk. | **Ignores cash flows after payback** and time value of money. |
+| **Benefit-Cost (B/C) Ratio** | Excellent for public/government sector projects. | Difficult to classify costs vs. disbenefits. |
+
+**Exam Traps:**
+
+* **Nominal vs. Effective Rate:** Using nominal rate ($r$) in standard compound interest formulas instead of effective rate per period ($i$).
+* **Annuity Timing:** Confusing **Ordinary Annuity** (payments at *end* of period) with **Annuity Due** (payments at *beginning* of period).
+* **Sunk Cost Inclusion:** Subtracting previous losses from future project analyses. (Rule: Start at $t=0$, ignore the past).
+* **Mutually Exclusive IRR:** Picking the project with the highest IRR instead of performing an **Incremental IRR Analysis** ($\Delta IRR$).
+* **Exact vs. Ordinary Interest:** Assuming 365 days when the problem says "ordinary interest" (use 360).
+
+**Bottom-Line Summary:**
+Engineering Economics equips technical professionals to evaluate design alternatives and project viability by converting disparate cash flows into equivalent values using the time value of money, strictly prioritizing alternatives that exceed the Minimum Attractive Rate of Return (MARR). By systematically isolating sunk costs, properly aligning compounding periods via effective interest rates, and utilizing deterministic models (PW, AW, IRR) alongside risk/uncertainty matrices (Expected Value, Minimax), engineers bridge the gap between technical feasibility and financial profitability, ensuring capital allocation maximizes long-term organizational wealth.
+
+---
+
+### **3. Application (Calculations & Engineering)**
+
+**Formulas:**
+
+* **Simple Interest:**
+
+$$I = Pni \quad \text{and} \quad F = P(1 + ni)$$
+
+
+* $P$: Principal, $n$: Periods, $i$: Interest rate per period, $F$: Future amount, $I$: Total interest.
+* *Meaning:* Interest earned strictly on the original principal.
+
+
+* **Single Payment Compound Interest:**
+
+$$F = P(1 + i)^n \quad \text{and} \quad P = F(1 + i)^{-n}$$
+
+
+* *Meaning:* Interest earned on principal plus accumulated interest.
+
+
+* **Effective Interest Rate ($i_{eff}$):**
+
+$$i_{eff} = \left(1 + \frac{r}{m}\right)^m - 1$$
+
+
+* $r$: Nominal annual rate, $m$: Compounding periods per year.
+* *Meaning:* True annual yield accounting for intra-year compounding.
+
+
+* **Continuous Compounding:**
+
+$$F = Pe^{rn} \quad \text{and} \quad i_{eff} = e^r - 1$$
+
+
+* $e$: Euler's number ($2.718...$).
+* *Meaning:* Limit as compounding periods approach infinity.
+
+
+* **Ordinary Annuity (Find $P$ given $A$):**
+
+$$P = A\left[ \frac{(1 + i)^n - 1}{i(1 + i)^n} \right]$$
+
+
+* $A$: Uniform series amount (payment at end of each period).
+* *Meaning:* Present worth of a series of equal future payments.
+
+
+* **Ordinary Annuity (Find $F$ given $A$):**
+
+$$F = A\left[ \frac{(1 + i)^n - 1}{i} \right]$$
+
+
+* *Meaning:* Future accumulated value of a series of equal payments.
+
+
+* **Annuity Due:**
+
+$$P_{due} = P_{ordinary} \times (1 + i) \quad | \quad F_{due} = F_{ordinary} \times (1 + i)$$
+
+
+* *Meaning:* Payments made at the **beginning** of the period (e.g., rent).
+
+
+* **Perpetuity / Capitalized Cost ($CC$):**
+
+$$P = \frac{A}{i} \quad | \quad CC = FC + \frac{RC - SV}{(1+i)^k - 1} + \frac{A}{i}$$
+
+
+* $FC$: First Cost, $RC$: Replacement Cost, $SV$: Salvage Value, $k$: Replacement interval.
+* *Meaning:* Present worth of infinite cash flows (e.g., bridge maintenance).
+
+
+* **Arithmetic Gradient (Find $P$ given $G$):**
+
+$$P = G \left[ \frac{(1+i)^n - in - 1}{i^2(1+i)^n} \right]$$
+
+
+* $G$: Constant increment/decrement amount per period.
+
+
+* **Expected Value (Risk):**
+
+$$EV = \sum (P_k \cdot V_k)$$
+
+
+* $P_k$: Probability of state $k$, $V_k$: Value of state $k$.
+
+
+
+**Practical Use:**
+
+* **Equipment Replacement:** Deciding whether to repair an old CNC machine (defender) or buy a new one (challenger) using Equivalent Uniform Annual Cost (EUAC).
+* **Bond Valuation:** Calculating present worth of face value plus present worth of coupon payments to determine purchase price.
+* **Loan Amortization:** Generating payment schedules for mortgages (Capital Recovery factor).
+* **Public Works:** Using B/C ratio to justify highway construction (Benefits / (Costs + Disbenefits) $\ge 1$).
+
+**Design Trade-Offs:**
+
+* **Capital vs. O&M Cost:** Automating a factory requires massive Initial Capital ($P$) but drastically reduces Operations & Maintenance Annuity ($A$). Evaluated via Present Worth ($PW$).
+* **Aggressive vs. Conservative Estimation:** In uncertainty, **Maximax** (optimistic) targets highest possible payoff risking massive loss; **Maximin** (pessimistic) minimizes potential losses sacrificing high upside.
+* **High-Yield vs. Liquidity:** High IRR projects lock up capital for years; short Payback Period projects free up capital quickly but may yield lower total profits.
+
+**High-Yield Exam Triggers:**
+
+| Keyword / Visual Cue | Memory Shortcut / Translation | Typical Exam Question Format |
+| --- | --- | --- |
+| **"Compounded continuously"** | Use $e^{rn}$ formulas. | Calculate future amount of continuously compounded account. |
+| **"Beginning of each period"** | Annuity Due. Multiply normal formula by $(1+i)$. | Find present worth of a 5-year lease paid at the start of each year. |
+| **"Maintained indefinitely"** | Perpetuity ($P = A/i$). | Calculate capitalized cost of a dam. |
+| **"Rate of $12\%$ compounded monthly"** | Nominal rate. $i = 12\%/12 = 1\%$ per month. | Find the effective annual interest rate. |
+| **"Best of the worst"** | Maximin criterion (Uncertainty). | Choose the alternative given a payoff matrix with unknown probabilities. |
+| **"Equally likely"** | Laplace criterion ($Probability = 1/n$). | Calculate the expected payoff under the Laplace principle. |
+| **"Index of optimism" ($\alpha$)** | Hurwicz criterion. | Value $= \alpha(\text{Max}) + (1-\alpha)(\text{Min})$. |
