@@ -1,0 +1,358 @@
+### 1. Knowledge (Recall & Facts)
+
+**Definitions:**
+
+* **Small-Signal Operation:** AC input variations sufficiently small; linearizes non-linear BJT characteristics around the DC Q-point.
+* **Small-Signal Condition:** Peak AC base-emitter voltage $v_{be} \ll V_T$ (typically $< 10\text{ mV}$).
+* **Superposition Theorem:** Fundamental principle allowing separate DC (biasing) and AC (small-signal) analysis.
+* **Transconductance ($g_m$):** Relates output AC current ($i_c$) to input AC voltage ($v_{be}$).
+* **$r_e$ Model:** T-model utilizing dynamic emitter resistance; heavily favored in classical discrete analysis (Boylestad).
+* **Hybrid-$\pi$ Model:** Small-signal equivalent circuit widely used for IC and high-frequency analysis (Sedra/Smith).
+* **Early Effect (Base-Width Modulation):** Variation of effective base width with $V_{CE}$; physically manifests as finite output resistance ($r_o$).
+* **Bypass Capacitor ($C_E$):** AC short across emitter resistor ($R_E$); maximizes voltage gain.
+* **Swamping Resistor:** Unbypassed portion of $R_E$; sacrifices gain for linearity and stability.
+
+**Critical Numbers:**
+
+* **Thermal Voltage ($V_T$):** $26\text{ mV}$ (at $T = 300\text{ K}$, standard for board exams) or $25\text{ mV}$ (room temperature approximation).
+* **Small-Signal Limit:** $v_{be} \le 10\text{ mV}$ (ensures $< 10\%$ harmonic distortion).
+* **Early Voltage ($V_A$):** $50\text{ V}$ to $100\text{ V}$ (NPN); lower for PNP.
+* **$r_o$ Range:** $40\text{ k}\Omega$ to $100\text{ k}\Omega$.
+* **$\beta_{ac}$ ($h_{fe}$):** $50$ to $300$ (often assumed equal to $\beta_{dc}$ or $h_{FE}$ unless specified).
+
+**Standards & Protocols:**
+
+* **JEDEC (EIA):** Transistor nomenclature (e.g., 2N3904, 2N2222 for general-purpose/small-signal NPN).
+* **JIS:** Japanese industrial standards (e.g., 2SA, 2SB, 2SC, 2SD prefixes).
+* **IEC 60747-7:** International standard for discrete semiconductor devices, specifically bipolar transistors.
+
+---
+
+### 2. Comprehension (Concepts & Relationships)
+
+**Visual Interpretation:**
+
+* **AC Equivalent Circuit:** DC voltage sources = ground (short); DC current sources = open; Coupling/Bypass Capacitors = short circuit.
+* **Hybrid-$\pi$ vs. T-model:** Mathematically identical at low frequencies. Hybrid-$\pi$ places input resistance ($r_\pi$) base-to-emitter. T-model places dynamic resistance ($r_e$) in the emitter branch.
+* **Input/Output Phase (CE):** $180^\circ$ phase shift (inversion). Output sine wave is flipped relative to input.
+* **Input/Output Phase (CB/CC):** $0^\circ$ phase shift (in-phase).
+
+**Pros vs. Cons:**
+
+| Configuration | Primary Advantage | Primary Disadvantage | Application Phase |
+| --- | --- | --- | --- |
+| **Common Emitter (CE)** | High $A_v$, High $A_i$. Best overall power gain. | High-frequency response limited by Miller capacitance; inverted output. | General-purpose amplification, RF/Audio gain stages. |
+| **Common Collector (CC)** | High $Z_{in}$, Low $Z_{out}$. Excellent for impedance matching. | Voltage gain ($A_v$) always strictly $< 1$. | Buffer stages, output power stages (emitter follower). |
+| **Common Base (CB)** | Excellent high-frequency bandwidth (no Miller effect). | Extremely low $Z_{in}$ ($r_e$). | RF amplifiers, moving-coil microphone pre-amps. |
+
+**Exam Traps:**
+
+* **Ignoring $r_o$ vs. Including $r_o$:** If Early Voltage ($V_A$) or output admittance ($h_{oe}$) is given, $r_o$ **must** be placed in parallel with $R_C$.
+* **$\beta$ vs $\beta + 1$:** When reflecting emitter resistance to the base, multiplier is $(\beta + 1)$. Often approximated as $\beta$ in rapid board exam calculations—check multiple-choice options for precision level.
+* **Loaded vs. Unloaded Gain:** $A_v$ drops significantly when load resistor ($R_L$) is attached. ($R_C$ becomes $R_C \parallel R_L$).
+* **$h_{ie}$ vs $r_\pi$:** They are the same parameter. $h_{ie} = \beta r_e = r_\pi$.
+* **AC Ground:** Mistaking $V_{CC}$ for an open circuit in AC analysis instead of a short to ground.
+
+**Bottom-Line Summary:**
+Small-signal analysis is a mathematical linearization technique that treats a non-linear BJT as a perfectly linear amplifier for microscopic AC variations, provided the transistor is accurately biased in the forward-active region. By utilizing the superposition theorem, DC sources are neutralized to construct an AC equivalent circuit (Hybrid-$\pi$ or $r_e$ model), reducing complex semiconductor physics into fundamental Ohm's and Kirchhoff's law node analyses. This framework dictates the absolute engineering trade-offs of single-stage amplifiers: the Common Emitter dominates power gain at the cost of bandwidth, the Common Collector isolates loads via impedance transformation without voltage gain, and the Common Base sacrifices input impedance to achieve superior high-frequency RF performance.
+
+---
+
+### 3. Application (Calculations & Engineering)
+
+**Formulas:**
+
+**Core BJT Parameters:**
+
+* **Transconductance:**
+
+$$g_m = \frac{I_{CQ}}{V_T}$$
+
+
+
+$I_{CQ}$: Quiescent collector current (A); $V_T$: Thermal voltage (V).
+* **Dynamic Emitter Resistance:**
+
+$$r_e = \frac{V_T}{I_{EQ}} \approx \frac{V_T}{I_{CQ}}$$
+
+
+
+$I_{EQ}$: Quiescent emitter current (A).
+* **Base Input Resistance:**
+
+$$r_\pi = \frac{\beta V_T}{I_{CQ}} = \beta r_e$$
+
+
+
+$\beta$: AC current gain.
+* **Output Resistance (Early Effect):**
+
+$$r_o = \frac{V_A + V_{CEQ}}{I_{CQ}} \approx \frac{V_A}{I_{CQ}}$$
+
+
+
+$V_A$: Early voltage (V).
+
+**Common Emitter (CE) - Fully Bypassed $R_E$:**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v = -g_m (R_C \parallel R_L \parallel r_o) = \frac{-(R_C \parallel R_L \parallel r_o)}{r_e}$$
+
+
+* **Input Impedance ($Z_{in}$):**
+
+$$Z_{in} = R_B \parallel r_\pi = R_1 \parallel R_2 \parallel \beta r_e$$
+
+
+* **Output Impedance ($Z_{out}$):**
+
+$$Z_{out} = R_C \parallel r_o \approx R_C$$
+
+
+
+**Common Emitter (CE) - Unbypassed $R_E$ (Swamped):**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v \approx \frac{-R_C}{R_E + r_e} \approx \frac{-R_C}{R_E}$$
+
+
+* **Input Impedance ($Z_{in}$):**
+
+$$Z_{in} = R_B \parallel [\beta(r_e + R_E)]$$
+
+
+
+**Common Collector (CC) / Emitter Follower:**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v = \frac{R_E \parallel R_L}{r_e + (R_E \parallel R_L)} \approx 1$$
+
+
+* **Input Impedance ($Z_{in}$):**
+
+$$Z_{in} = R_B \parallel [\beta (r_e + R_E \parallel R_L)]$$
+
+
+* **Output Impedance ($Z_{out}$):**
+
+$$Z_{out} = R_E \parallel \left( r_e + \frac{R_s \parallel R_B}{\beta} \right)$$
+
+
+
+$R_s$: Source resistance ($\Omega$).
+
+**Common Base (CB):**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v = \frac{R_C \parallel R_L}{r_e}$$
+
+
+* **Input Impedance ($Z_{in}$):**
+
+$$Z_{in} = R_E \parallel r_e \approx r_e$$
+
+
+
+**Practical Use:**
+
+* **Bypassed CE:** Main audio gain stages, IF amplifiers in superheterodyne receivers.
+* **Swamped CE:** Instrumentation amplifiers requiring stable, predictable gain immune to transistor $\beta$ mismatch.
+* **CC (Emitter Follower):** Audio output stages driving 8-ohm speakers; isolating a high-impedance sensor from a low-impedance ADC.
+* **CB:** UHF/VHF antenna pre-amplifiers; cascade amplifiers (used in combination with CE to form a Cascode for high-bandwidth applications).
+
+**Design Trade-Offs:**
+
+* **Swamping (Bypass vs. No Bypass):** Removing $C_E$ drastically lowers voltage gain but vastly increases $Z_{in}$ and makes the gain almost entirely dependent on external resistors ($R_C/R_E$) rather than temperature-sensitive $r_e$.
+* **$I_C$ Bias Level vs. $A_v$:** Higher $I_{CQ}$ decreases $r_e$, yielding higher theoretical voltage gain. However, higher $I_{CQ}$ decreases $r_o$ (lowering output impedance) and reduces input impedance ($r_\pi$), severely loading the previous stage.
+* **Quiescent Point (Q-Point) Placement:** Must be centered on the AC load line to maximize maximum unclipped peak-to-peak output swing ($V_{pp}$); deviating causes premature cutoff or saturation clipping.
+
+**High-Yield Exam Triggers:**
+
+| Keyword / Visual Cue | Memory Shortcut / Translation | Typical Exam Question Format |
+| --- | --- | --- |
+| **"Emitter Follower"** | Common Collector (CC); $A_v \approx 1$ | Identify configuration used for impedance matching. |
+| **"Swamping Resistor"** | Unbypassed CE; lowers/stabilizes gain | Calculate $A_v$ with a split $R_E$ (only part is bypassed). |
+| **$V_A$ or "Early Voltage" given** | $r_o$ is finite; calculate $r_o = V_A / I_C$ | Calculate precise voltage gain accounting for output resistance. |
+| **$180^\circ$ Phase Shift** | Common Emitter (CE) | Which configuration inverts the input signal? |
+| **"Highest Input Impedance"** | Common Collector (CC) | Rank configurations by $Z_{in}$. |
+| **"Zero Miller Effect"** | Common Base (CB) | Why is CB used in high-frequency RF? |
+
+### 1. Knowledge (Recall & Facts)
+
+**Definitions:**
+
+* **Voltage-Controlled Device:** FET relies on input voltage ($V_{GS}$) to control output current ($I_D$); BJT relies on input current ($I_B$).
+* **Small-Signal AC Model:** Linearized equivalent circuit replacing non-linear square-law DC characteristics.
+* **Transconductance ($g_m$):** Transfer characteristic linking input AC voltage ($v_{gs}$) to output AC current ($i_d$).
+* **Drain Resistance ($r_d$ or $r_{ds}$):** Internal AC output resistance resulting from channel-length modulation.
+* **Maximum Transconductance ($g_{m0}$):** Transconductance value when $V_{GS} = 0\text{ V}$ (JFET/D-MOSFET only).
+* **Channel-Length Modulation ($\lambda$):** FET equivalent to BJT Early Effect; causes non-zero slope in the saturation region.
+* **Transconductance Parameter ($k$ or $k_n$):** Constant dependent on device geometry and fabrication (E-MOSFET).
+
+**Critical Numbers:**
+
+* **Gate Current ($I_G$):** $0\text{ A}$ (ideal DC and low-frequency AC).
+* **Input Impedance ($Z_{in}$ for FET inherently):** $\approx \infty\text{ }\Omega$ (ideal).
+* **Typical $g_m$ Range:** $1\text{ mS}$ to $10\text{ mS}$ (generally much lower than BJT $g_m$).
+* **Typical $r_d$ Range:** $10\text{ k}\Omega$ to $100\text{ k}\Omega$.
+* **Small-Signal Condition:** $v_{gs}$ must be small enough to maintain linear operation around the Q-point.
+
+**Standards & Protocols:**
+
+* **JEDEC (EIA):** North American discrete nomenclature (e.g., 2N7000 for N-channel enhancement MOSFET).
+* **Pro-Electron:** European designation (e.g., BF245 for N-channel RF JFET).
+* **IEEE 315 / ANSI Y32.2:** Standard graphic symbols for logic and schematic representation of FETs.
+
+---
+
+### 2. Comprehension (Concepts & Relationships)
+
+**Visual Interpretation:**
+
+* **AC Equivalent Circuit:** DC sources = ground; Capacitors = short circuits; Gate-to-Source = open circuit; Drain-to-Source = dependent current source ($g_m v_{gs}$) in parallel with $r_d$.
+* **Transfer Curve (JFET/D-MOSFET):** Parabolic curve from $V_P$ (where $I_D = 0$) to $I_{DSS}$ (where $V_{GS} = 0$). $g_m$ equals the instantaneous slope at the Q-point.
+* **Phase Inversion:** CS configuration = $180^\circ$ phase shift; CD and CG configurations = $0^\circ$ phase shift (in-phase).
+
+**Pros vs. Cons:**
+
+| Configuration | Primary Advantage | Primary Disadvantage | Typical Application |
+| --- | --- | --- | --- |
+| **Common Source (CS)** | High voltage gain ($A_v$); exceptionally high input impedance ($Z_{in}$). | Output inversion; high-frequency bandwidth limited by Miller effect. | Low-noise front-end voltage amplifiers; RF receivers. |
+| **Common Drain (CD)** | Very low output impedance ($Z_{out}$); prevents loading. | Voltage gain ($A_v$) always strictly $< 1$. | Buffer amplifiers; source followers; impedance matching stages. |
+| **Common Gate (CG)** | Superior high-frequency performance; no Miller capacitance. | Extremely low input impedance ($Z_{in}$). | High-frequency RF amplifiers; impedance transformers. |
+
+**Exam Traps:**
+
+* **BJT vs. FET $g_m$:** BJT $g_m$ depends on $I_C$; FET $g_m$ depends on $V_{GS}$ (and device geometry/constants).
+* **Neglecting $r_d$:** If output admittance ($y_{os}$), Early voltage ($V_A$), or $\lambda$ is provided, $r_d$ **must** be calculated and placed in parallel with $R_D$.
+* **Gate Resistance ($R_G$):** AC input impedance of a CS amplifier is determined entirely by the biasing resistor $R_G$, not the FET itself (since FET $Z_{in} = \infty$).
+* **JFET vs. E-MOSFET Formulas:** Applying JFET Shockley formulas to E-MOSFETs. E-MOSFET requires the $k(V_{GS} - V_T)^2$ relationship.
+
+**Bottom-Line Summary:**
+Field-Effect Transistor small-signal analysis translates the non-linear, voltage-controlled square-law mechanics of FETs into a strictly linear equivalent circuit applicable to microscopic AC variations around a stable DC Q-point. Because the insulated or reverse-biased gate draws virtually zero steady-state current, FETs offer nearly infinite intrinsic input impedance, effectively neutralizing input loading effects. While their transconductance ($g_m$) is generally an order of magnitude lower than that of equivalent BJTs—yielding inherently lower voltage gains—their exceptional noise figures and near-zero input draw make them the undisputed standard for high-impedance electrometers, precision RF front-ends, and buffer amplification stages.
+
+---
+
+### 3. Application (Calculations & Engineering)
+
+**Formulas:**
+
+**Core Transconductance Parameters:**
+
+* **$g_m$ (JFET & D-MOSFET):**
+
+$$g_m = \frac{2I_{DSS}}{|V_P|} \left( 1 - \frac{V_{GSQ}}{V_P} \right)$$
+
+
+
+$I_{DSS}$: Saturation drain current (A); $V_P$: Pinch-off voltage (V); $V_{GSQ}$: Quiescent gate-source voltage (V).
+* **Maximum Transconductance ($g_{m0}$):**
+
+$$g_{m0} = \frac{2I_{DSS}}{|V_P|}$$
+
+
+
+Physical Meaning: $g_m$ value evaluated exactly at $V_{GS} = 0\text{ V}$.
+* **$g_m$ (Enhancement MOSFET):**
+
+$$g_m = 2k(V_{GSQ} - V_{GS(th)})$$
+
+
+
+$k$: Device constant (A/V$^2$); $V_{GS(th)}$: Threshold voltage (V).
+* **Output Drain Resistance ($r_d$):**
+
+$$r_d = \frac{1}{g_{os}} = \frac{1}{y_{os}} = \frac{1}{\lambda I_{DQ}} = \frac{V_A}{I_{DQ}}$$
+
+
+
+$g_{os}/y_{os}$: Output admittance (S); $\lambda$: Channel-length modulation parameter (V$^{-1}$); $V_A$: Early voltage equivalent (V).
+
+**Common Source (CS) - Fully Bypassed $R_S$:**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v = -g_m (R_D \parallel R_L \parallel r_d)$$
+
+
+* **Input Impedance ($Z_{in}$):**
+
+$$Z_{in} = R_G$$
+
+
+* **Output Impedance ($Z_{out}$):**
+
+$$Z_{out} = R_D \parallel r_d$$
+
+
+
+**Common Source (CS) - Unbypassed $R_S$ (Swamped):**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v = \frac{-g_m R_D}{1 + g_m R_S}$$
+
+
+ *(Assuming $r_d \ge 10(R_D + R_S)$)*
+* **Output Impedance ($Z_{out}$):**
+
+$$Z_{out} = R_D$$
+
+
+
+**Common Drain (CD) / Source Follower:**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v = \frac{g_m (R_S \parallel R_L \parallel r_d)}{1 + g_m (R_S \parallel R_L \parallel r_d)}$$
+
+
+* **Input Impedance ($Z_{in}$):**
+
+$$Z_{in} = R_G$$
+
+
+* **Output Impedance ($Z_{out}$):**
+
+$$Z_{out} = R_S \parallel r_d \parallel \frac{1}{g_m}$$
+
+
+
+**Common Gate (CG):**
+
+* **Voltage Gain ($A_v$):**
+
+$$A_v = g_m (R_D \parallel R_L \parallel r_d)$$
+
+
+* **Input Impedance ($Z_{in}$):**
+
+$$Z_{in} = R_S \parallel \frac{1}{g_m}$$
+
+
+
+**Practical Use:**
+
+* **CS Stages:** Electrometer amplifiers; high-impedance oscilloscope probes; condenser microphone pre-amplifiers.
+* **CD (Source Follower):** Inter-stage buffering in ICs; high-to-low impedance transformation before driving heavy loads.
+* **CG Stages:** RF cascode amplifiers; low-noise block downconverters (LNB) in satellite dishes.
+
+**Design Trade-Offs:**
+
+* **Gain vs. Bandwidth:** CS offers highest gain but suffers from Miller capacitance multiplying gate-drain capacitance ($C_{gd}$), bottlenecking high-frequency performance. CG sacrifices input impedance entirely to eliminate this Miller multiplication.
+* **Bypassing $R_S$:** Adding a bypass capacitor maximizes $A_v$ but makes the amplifier highly sensitive to variations in $g_m$ across different FET batches. Leaving $R_S$ unbypassed stabilizes gain at the cost of overall amplitude.
+
+**High-Yield Exam Triggers:**
+
+| Keyword / Visual Cue | Memory Shortcut / Translation | Typical Exam Question Format |
+| --- | --- | --- |
+| **"Infinite Input Impedance"** | Ideal FET characteristic | What is the theoretical $Z_{in}$ looking directly into the gate? |
+| **"Source Follower"** | Common Drain (CD); $A_v \approx 1$ | Identify the FET configuration equivalent to an Emitter Follower. |
+| **$y_{os}$ or $g_{os}$ given** | Calculate $r_d = 1 / y_{os}$ | Calculate accurate $A_v$ accounting for finite output resistance. |
+| **$V_{GS} = 0\text{ V}$** | $g_m = g_{m0}$; $I_D = I_{DSS}$ | Calculate transconductance in a zero-biased configuration. |
+| **"Lowest Input Impedance"** | Common Gate (CG); $Z_{in} \approx 1/g_m$ | Rank FET configurations from lowest to highest $Z_{in}$. |
+| **E-MOSFET parameters ($k, V_{GS(th)}$)** | Do not use Shockley's equation | Calculate $g_m$ for an enhancement-type MOSFET. |

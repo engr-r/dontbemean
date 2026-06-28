@@ -1,0 +1,132 @@
+# Microprocessor & Microcontroller Systems and Design: Microprocessor Unit (MPU)
+
+## 1. Knowledge (Recall & Facts)
+
+### Definitions
+
+* **Microprocessor Unit (MPU)**: Core silicon chip; IC acting as CPU; no internal ROM/RAM/IO.
+* **Arithmetic Logic Unit (ALU)**: Computational engine; handles math (add, sub) and logic (AND, OR, XOR).
+* **Control Unit (CU)**: Traffic director; fetches, decodes, executes instructions; generates timing signals.
+* **Accumulator (AX/A)**: Primary working register; holds operands and ALU results.
+* **Program Counter (PC)**: Dedicated register; holds memory address of the **next** instruction.
+* **Instruction Register (IR)**: Holds current opcode during decoding phase.
+* **Stack Pointer (SP)**: Points to memory addresses of the Top of Stack (LIFO structure).
+* **System Bus**: Parallel wire pathways; divided into **Address**, **Data**, and **Control** buses.
+* **Address Bus**: Unidirectional; MPU to memory/IO; determines max memory capacity.
+* **Data Bus**: Bidirectional; carries actual instructions/data; determines word size.
+* **Control Bus**: Mixed directional; carries read/write/interrupt/clock signals.
+* **Clock ($f_{clk}$)**: Crystal oscillator input; synchronizes all internal MPU operations.
+* **Interrupt**: Hardware/software signal; halts current execution to service urgent routines (ISR).
+
+### Critical Numbers
+
+* **8-bit MPU**: Data bus = 8 lines; typical address bus = 16 lines ($2^{16} = \text{64 KB}$ memory).
+* **16-bit MPU**: Data bus = 16 lines; typical address bus = 20 lines ($2^{20} = \text{1 MB}$ memory).
+* **32-bit MPU**: Data bus = 32 lines; typical address bus = 32 lines ($2^{32} = \text{4 GB}$ memory).
+* **Standard Voltage Logic Levels**: TTL Logic 0 ($0\text{V} - 0.8\text{V}$), TTL Logic 1 ($2.0\text{V} - 5.0\text{V}$).
+* **Instruction Cycle**: Machine cycle typically requires $1$ to $6$ clock pulses ($T$-states).
+
+### Standards & Protocols
+
+* **Von Neumann Architecture**: Single shared bus/memory space for data and instructions.
+* **Harvard Architecture**: Physically separate buses and memory for data and instructions.
+* **CISC (Complex Instruction Set Computer)**: Extensive instruction set; multi-clock cycle instructions.
+* **RISC (Reduced Instruction Set Computer)**: Minimalist instructions; single-clock cycle execution.
+* **IEEE 754**: Standard for floating-point arithmetic representation in MPUs.
+
+---
+
+## 2. Comprehension (Concepts & Relationships)
+
+### Visual Interpretation
+
+* **Timing Diagram**: $X$-axis = clock cycles ($T$-states); $Y$-axis = bus state (High, Low, High-Z); maps instruction execution sequence.
+* **Block Diagram**: Three-box core (ALU, CU, Registers) interconnected by internal buses.
+* **Memory Map**: Hexadecimal address grid; visualizes RAM/ROM boundaries and memory-mapped I/O locations.
+* **Waveforms**: Square waves indicating clock pulses; duty cycle typically 50%.
+* **Tri-State Logic**: High, Low, High-Impedance (High-Z); High-Z effectively disconnects the pin from the bus to prevent data collisions.
+
+### Pros vs. Cons: Architectures
+
+| Feature | Von Neumann | Harvard |
+| --- | --- | --- |
+| **Bus Structure** | Single, shared bus | Dual, separate buses |
+| **Speed** | Slower (bottleneck) | Faster (simultaneous fetch) |
+| **Hardware Complexity** | Lower (fewer pins/wires) | Higher (more pins/wires) |
+| **Space Utilization** | High (shared free space) | Rigid (fixed code/data spaces) |
+
+### Exam Traps
+
+* **MPU vs. MCU**: MPU requires external memory/peripherals; MCU has built-in RAM/ROM/IO (computer on a chip).
+* **Address vs. Data Bus Sizing**: Address bus width determines *memory size* ($2^A$). Data bus width determines *processing power/word size*.
+* **Little Endian vs. Big Endian**: Little Endian stores Least Significant Byte (LSB) at the lowest memory address; Big Endian stores Most Significant Byte (MSB) at the lowest address.
+* **Instruction Fetch vs. Execute**: Fetch brings opcode to IR; Execute performs the action. Fetch *always* precedes Execute.
+* **Maskable vs. Non-Maskable Interrupts**: Maskable can be ignored by software (clearing interrupt flag); Non-Maskable (NMI) *must* be serviced immediately.
+
+### Bottom-Line Summary
+
+The Microprocessor Unit serves as the foundational silicon brain of modern computing, structurally partitioned into the ALU for data manipulation, the Control Unit for instruction orchestration, and registers for transient data buffering, all entirely reliant on external memory and peripherals interconnected via the system bus to execute complex, multi-cycle logical operations driven by a rigid, synchronous clock signal.
+
+---
+
+## 3. Application (Calculations & Engineering)
+
+### Formulas
+
+* **Total Memory Capacity ($C$)**
+* $C = 2^A \times D$
+* $A$: Number of address bus lines
+* $D$: Number of data bus lines (word size in bits)
+* *Unit*: Bits (divide by 8 for Bytes)
+* *Meaning*: Maximum addressable physical memory.
+
+
+* **Clock Period ($T_{clk}$)**
+* $T_{clk} = \frac{1}{f_{clk}}$
+* $f_{clk}$: Clock frequency
+* *Unit*: Seconds (s)
+* *Meaning*: Duration of a single clock cycle / T-state.
+
+
+* **Instruction Execution Time ($T_{exec}$)**
+* $T_{exec} = N \times T_{clk}$
+* $N$: Number of clock cycles required for the instruction
+* *Unit*: Seconds (s)
+* *Meaning*: Total time to complete one specific machine instruction.
+
+
+* **MIPS (Millions of Instructions Per Second)**
+* $\text{MIPS} = \frac{f_{clk}}{N_{avg} \times 10^6}$
+* $N_{avg}$: Average cycles per instruction (CPI)
+* *Unit*: MIPS
+* *Meaning*: Metric of raw processing speed.
+
+
+
+### Practical Use
+
+* **General Purpose Computing**: Intel x86/x64 series in desktop PCs and servers (CISC-based).
+* **Mobile & Embedded**: ARM Cortex-A series in smartphones and tablets (RISC-based).
+* **Industrial Control**: Older 8-bit MPUs (Z80, 8085) still utilized as cores in ruggedized PLCs.
+* **Memory-Mapped I/O**: Interfacing ADCs and DACs by assigning them specific address locations just like RAM.
+
+### Design Trade-Offs
+
+* **Clock Speed vs. Power Dissipation**: Higher $f_{clk}$ yields faster execution but exponentially increases heat/power consumption ($P \propto f \cdot C \cdot V^2$).
+* **CISC vs. RISC**: CISC reduces code size but increases hardware complexity; RISC simplifies hardware but requires more RAM for longer code.
+* **Pipeline Depth**: Deeper pipelines increase throughput (instructions per clock) but cause severe performance penalties during branch mispredictions.
+
+### High-Yield Exam Triggers (Rapid Keyword Association)
+
+* **Keyword**: "Brain of the computer" $\rightarrow$ **MPU/CPU**.
+* **Keyword**: "Address of next instruction" $\rightarrow$ **Program Counter (PC)**.
+* **Keyword**: "LIFO memory structure" $\rightarrow$ **Stack Pointer (SP)**.
+* **Keyword**: "Arithmetic and logic" $\rightarrow$ **ALU**.
+* **Keyword**: "Traffic cop / Orchestrator" $\rightarrow$ **Control Unit (CU)**.
+* **Keyword**: "Unidirectional bus" $\rightarrow$ **Address Bus**.
+* **Keyword**: "Bidirectional bus" $\rightarrow$ **Data Bus**.
+* **Keyword**: "Temporary fast storage inside CPU" $\rightarrow$ **Registers**.
+* **Keyword**: "Highest priority interrupt" $\rightarrow$ **NMI (Non-Maskable Interrupt) / TRAP**.
+* **Keyword**: "Fetch-Decode-Execute" $\rightarrow$ **Machine Cycle**.
+* **Keyword**: "Shared memory for code and data" $\rightarrow$ **Von Neumann**.
+* **Keyword**: "Separate memory for code and data" $\rightarrow$ **Harvard**.

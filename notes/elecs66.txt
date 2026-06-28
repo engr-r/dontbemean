@@ -1,0 +1,123 @@
+### **Topic: Electronic Systems and Design - Security, Safety, and Surveillance Control Systems**
+
+---
+
+### **1. Knowledge (Recall & Facts)**
+
+**Definitions**
+
+* **Access Control System (ACS)**: Hardware/software regulating physical entry (RFID, biometrics, keypads).
+* **Intrusion Detection System (IDS)**: Network of sensors (glass-break, magnetic contacts, motion) triggering alarms upon perimeter breach.
+* **Passive Infrared (PIR)**: Sensor detecting variations in ambient infrared radiation (body heat) across its field of view.
+* **Closed-Circuit Television (CCTV)**: Private video surveillance network.
+* **DVR vs. NVR**: **D**igital **V**ideo **R**ecorder (encodes analog signals at the panel) vs. **N**etwork **V**ideo **R**ecorder (receives pre-encoded digital IP streams).
+* **Fire Alarm Control Panel (FACP)**: Central hub monitoring **initiating devices** (smoke/heat detectors) and activating **notification appliances** (horns/strobes).
+* **Fail-Safe**: Lock releases (opens) upon power loss; strictly prioritized for **life safety** and evacuation.
+* **Fail-Secure**: Lock engages (locks) upon power loss; strictly prioritized for **asset protection**.
+
+**Critical Numbers**
+
+* **Human Body IR Emission**: Peak wavelength $\approx 9.4\text{ }\mu\text{m}$ (target for PIR sensors).
+* **Standard Video Frequencies**: **$30\text{ fps}$** (NTSC/Real-time), **$24\text{ fps}$** (Cinema/Legacy).
+* **PoE (Power over Ethernet) Standard Voltage**: **$48\text{ V DC}$** (IEEE 802.3af/at).
+* **Alarm Loop End-of-Line (EOL) Resistor**: Typically **$2.2\text{ k}\Omega$ to $10\text{ k}\Omega$** (supervises wire integrity).
+* **Wiegand Protocol Format**: **26-bit** standard (common RFID reader-to-controller data format).
+* **CO Detection Threshold**: Alarms trigger at **$70\text{ ppm}$** within 60 to 240 minutes.
+
+**Standards & Protocols**
+
+* **NFPA 72**: National Fire Alarm and Signaling Code (Critical for Safety Officers / SO2 compliance).
+* **ONVIF**: Open Network Video Interface Forum (interoperability standard for IP-based physical security products).
+* **UL 294**: Standard for Access Control System Units.
+* **H.264 / H.265 (HEVC)**: Advanced Video Coding standards defining aggressive video compression.
+* **RS-485**: Standard physical layer for long-distance ($1200\text{ m}$) ACS reader/controller networks.
+
+---
+
+### **2. Comprehension (Concepts & Relationships)**
+
+**Visual Interpretation**
+
+* **FACP Class A vs. Class B Wiring**:
+* **Class B**: Linear daisy-chain ending in an EOL resistor. Single wire break disables all downstream devices.
+* **Class A**: Redundant return path to the panel. Single wire break still allows full system operation.
+
+
+* **Camera Field of View (FOV)**: Inversely proportional to focal length. **Short focal length** ($2.8\text{ mm}$) = Wide angle. **Long focal length** ($12\text{ mm}$) = Narrow, zoomed-in telephoto.
+* **PIR Fresnel Lens Pattern**: Alternating active/inactive fan-shaped detection zones. Movement *across* the zones triggers an alarm; movement straight *toward* the sensor may fail to trigger.
+
+**Pros vs. Cons**
+
+| Sensor/Tech | Advantages | Disadvantages |
+| --- | --- | --- |
+| **IP Cameras (IoT)** | High resolution; PoE capability; edge-analytics/AI. | Network bandwidth heavy; vulnerable to cyber attacks. |
+| **PIR Sensors** | Extremely cheap; ignores inanimate moving objects. | Prone to false alarms from HVAC vents or direct sunlight. |
+| **Dual-Tech (PIR + Microwave)** | Virtual elimination of false alarms (both must trigger). | Expensive; higher power consumption. |
+| **Biometric Access** | Highest security (cannot share credentials). | Slower throughput; privacy compliance issues; False Rejection Rate (FRR). |
+
+**Exam Traps**
+
+* **Fail-Safe vs. Fail-Secure Trap**: Fire exits **must** use Fail-Safe locks (Maglocks). High-security IT server racks use Fail-Secure (Electric Strikes).
+* **NVR vs. DVR Camera Trap**: NVRs use IP cameras (digital). DVRs use coaxial cameras (analog).
+* **Smoke vs. Heat Detector Trap**: Smoke detectors (photoelectric/ionization) for life safety (early warning). Heat detectors (rate-of-rise/fixed) for property protection in dusty/smoky environments (kitchens, garages) where smoke detectors cause false alarms.
+* **Wiegand vs. OSDP**: Wiegand is one-way, unencrypted, and legacy. OSDP (Open Supervised Device Protocol) is two-way, encrypted, and modern.
+
+**Bottom-Line Summary**
+Security and life-safety systems fuse networked microelectronics, specialized sensors, and rigorous building codes to protect human life and structural assets. Mastery requires distinguishing between life-safety mandates—such as NFPA 72 Class A redundant wiring loops and fail-safe egress protocols—and asset protection architectures leveraging edge-computed IP video and dual-technology intrusion detection. The engineering challenge lies in balancing rigorous false-alarm mitigation through sensor fusion against the massive bandwidth and data-storage demands of high-compression, multi-node IP surveillance arrays.
+
+---
+
+### **3. Application (Calculations & Engineering)**
+
+**Formulas**
+
+* **Lens Focal Length ($f$)**:
+$f = \frac{v \times D}{V}$
+* $f$: Focal length ($\text{mm}$)
+* $v$: Sensor format height ($\text{mm}$)
+* $D$: Distance to subject ($\text{m}$)
+* $V$: Vertical field of view required at subject ($\text{m}$)
+* *Meaning*: Determines the correct lens to achieve the desired surveillance framing.
+
+
+* **Video Storage Calculation ($S$)**:
+$S = \frac{R \times 86400 \times d \times c}{8 \times 10^9}$
+* $S$: Storage required ($\text{GB}$)
+* $R$: Bitrate of camera ($\text{bps}$)
+* $d$: Number of days to record
+* $c$: Number of cameras
+* *Meaning*: Calculates hard drive capacity required for an NVR array.
+
+
+* **System Availability ($A$)**:
+$A = \frac{\text{MTBF}}{\text{MTBF} + \text{MTTR}}$
+* $A$: Availability (percentage, e.g., $0.99999$)
+* $\text{MTBF}$: Mean Time Between Failures ($\text{hours}$)
+* $\text{MTTR}$: Mean Time To Repair ($\text{hours}$)
+* *Meaning*: Reliability metric for mission-critical safety systems.
+
+
+
+**Practical Use**
+
+* **IoT Smart Surveillance**: Utilizing an **ESP32-CAM** coupled with a PIR module to create a low-power, edge-triggered security node that transmits H.264 video to an MQTT broker only when human motion is verified.
+* **Fire Evacuation**: FACP directly interfaces with the Access Control System. Upon alarm, FACP cuts power to all door **Maglocks**, reverting them to their fail-safe (open) state for immediate evacuation.
+* **Perimeter Defense**: Active Infrared (AIR) photoelectric beams spanning building perimeters, triggering IDS if the beam is broken by physical intrusion.
+
+**Design Trade-Offs**
+
+* **Video Compression (H.264 vs. H.265)**: H.265 uses $\approx 50\%$ less bandwidth/storage than H.264 but requires significantly more processing power (CPU overhead) at the camera and NVR to encode/decode.
+* **Motion Detection (Software vs. Hardware)**: Software pixel-based motion detection is free but triggers on shadows/trees. Hardware PIR is immune to shadows but requires physical sensor integration.
+* **RFID vs. Biometrics**: RFID offers high throughput (fast clock-ins) but cards can be stolen. Biometrics ensure identity but slow down entry queues during peak shift changes.
+
+**High-Yield Exam Triggers**
+
+| Keyword / Looksfam | Visual Cue | Memory Shortcut | Typical Board Question |
+| --- | --- | --- | --- |
+| **Return path / Redundant** | Loop goes back to panel | **Class A** = **A**lways active | "A fire alarm wiring method that provides a return path to the panel is..." |
+| **Drops power to open** | Magnetic lock | **Fail-Safe** = Safe for humans | "For life safety in a fire, electric locks on exit doors must be configured as..." |
+| **IP interoperability** | Cameras talking to NVRs | **ONVIF** (Open Network Video...) | "The global standard for the interface of IP-based physical security products is..." |
+| **Body heat / $9.4\text{ }\mu\text{m}$** | Grid lens on a wall sensor | **PIR** = **P**assive **I**nfra**R**ed | "Which sensor detects intruders by sensing changes in thermal radiation?" |
+| **Supervisory / EOL** | Resistor at end of wire | **EOLR** = Watches the wire | "What component is used to monitor an alarm loop for open or short circuits?" |
+| **Two sensors in one** | PIR + Microwave | **Dual-Tech** = No false alarms | "A sensor requiring both thermal and microwave detection to trigger is a..." |
+| **NFPA 72** | Number standard | **Fire Code** | "Which NFPA standard covers the installation of fire alarm systems?" |

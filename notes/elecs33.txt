@@ -1,0 +1,174 @@
+### **1. Knowledge (Recall & Facts)**
+
+**Definitions:**
+
+* **Magnetic Circuit:** Closed path for magnetic flux; analogous to electrical circuits.
+* **Magnetomotive Force (MMF, $\mathcal{F}$):** Magnetic pressure driving flux; analogous to electromotive force (Voltage).
+* **Magnetic Flux ($\Phi$):** Total magnetic field lines passing through a surface; analogous to Current.
+* **Reluctance ($\mathcal{R}$):** Opposition to magnetic flux; analogous to Resistance.
+* **Permeance ($\mathcal{P}$):** Ease of magnetic flux flow; reciprocal of Reluctance; analogous to Conductance.
+* **Self-Inductance ($L$):** Ability of a coil to induce EMF due to its own changing current.
+* **Mutual Inductance ($M$):** Ability of one coil's changing current to induce EMF in a secondary, adjacent coil.
+* **Coefficient of Coupling ($k$):** Fractional measure of total flux from coil 1 linking with coil 2.
+* **Dot Convention:** Polarity marking system indicating relative phase of mutually coupled coils.
+* **Leakage Flux:** Magnetic flux escaping the intended core path; fails to link coupled coils.
+* **Fringing Effect:** Bulging of magnetic flux lines at an air gap; effectively increases cross-sectional area.
+
+**Critical Numbers:**
+
+* **Permeability of Free Space ($\mu_0$):** $4\pi \times 10^{-7}$ H/m.
+* **Relative Permeability ($\mu_r$) - Ferromagnetic:** $1,000$ to $100,000$ (Iron, Steel, Permalloy).
+* **Relative Permeability ($\mu_r$) - Air/Vacuum:** Exactly **$1$**.
+* **Ideal Transformer Coupling:** $k = 1$ (100% flux linkage).
+* **Air Core Coupling:** $k < 0.5$ (Loose coupling).
+* **Iron Core Coupling:** $k \approx 0.99$ (Tight coupling).
+
+**Standards & Protocols:**
+
+* **IEEE Std 315:** Graphic Symbols for Electrical and Electronics Diagrams (defines dot convention and coupled inductor symbology).
+* **IEC 60050-121:** International Electrotechnical Vocabulary (standardizes Electromagnetism terminology).
+* **ASTM A340:** Standard Terminology of Symbols and Definitions Relating to Magnetic Testing.
+
+---
+
+### **2. Comprehension (Concepts & Relationships)**
+
+**Visual Interpretation:**
+
+* **Electrical-Magnetic Analogy (Hopkinson's Law):** * Voltage ($V$) $\leftrightarrow$ MMF ($\mathcal{F}$)
+* Current ($I$) $\leftrightarrow$ Flux ($\Phi$)
+* Resistance ($R$) $\leftrightarrow$ Reluctance ($\mathcal{R}$)
+* Conductivity ($\sigma$) $\leftrightarrow$ Permeability ($\mu$)
+
+
+* **Dot Convention KVL Rules:**
+* Currents entering both dots: MMFs add (Series Aiding).
+* Current entering one dot, leaving other: MMFs subtract (Series Opposing).
+
+
+* **Air Gap B-H Effect:** Shears the B-H curve linearly; lowers overall inductance but prevents premature magnetic core saturation.
+* **Coupled Equivalent Circuits:** Two mutually coupled coils translate to a conductive "T-network" (star) or "Pi-network" (delta) for nodal/mesh analysis.
+
+**Pros vs. Cons:**
+
+| Configuration/Component | Pros | Cons |
+| --- | --- | --- |
+| **Iron Core (High $\mu$)** | Massive inductance; tight coupling ($k \approx 1$); flux containment | Core saturation limits; eddy current/hysteresis losses |
+| **Air Core ($\mu_r = 1$)** | Zero saturation limit; zero core losses; highly linear | Huge leakage flux; enormous size needed for high $L$ |
+| **Series Aiding** | Maximizes total equivalent inductance ($L_{eq}$) | Higher induced EMF stress on insulation |
+| **Air Gap Insertion** | Prevents core saturation; stabilizes inductance value | Drastically increases reluctance; creates EMI via fringing |
+
+**Exam Traps:**
+
+* **Forgetting $\mu_0$:** Calculating $\mathcal{R}$ using only $\mu_r$ instead of absolute permeability ($\mu = \mu_0 \mu_r$).
+* **Fringing Area Error:** Ignoring the addition of the air gap length ($l_g$) to the core dimensions ($A_{gap} \approx (a+l_g)(b+l_g)$) when strictly required.
+* **Flux vs. Flux Density:** Confusing total flux $\Phi$ (Webers) with flux density $B$ (Teslas).
+* **Parallel Coupled Coils Sign:** Using the series aiding/opposing sign convention incorrectly in parallel formulas. (Aiding in parallel *subtracts* $2M$ in denominator).
+* **MMF Drops:** Failing to sum series reluctances ($\mathcal{R}_{core} + \mathcal{R}_{gap}$) when calculating total required Ampere-turns.
+
+**Bottom-Line Summary:**
+Coupled and magnetic circuits constitute the macroscopic, lumped-parameter application of Maxwell’s equations, translating complex vector fields into simple scalar networks analogous to Ohm's Law via Hopkinson's principle. By manipulating core reluctance, air gaps, and the spatial coefficient of coupling ($k$), engineers exploit the mutual inductance between isolated coils to facilitate highly efficient energy transfer, impedance matching, and electromagnetic force generation, perfectly balancing the trade-offs between core saturation, flux leakage, and operational bandwidth in transformers and electromechanical actuators.
+
+---
+
+### **3. Application (Calculations & Engineering)**
+
+**Formulas:**
+
+* **Magnetomotive Force (MMF):**
+
+$$\mathcal{F} = NI = \Phi \mathcal{R} = H l$$
+
+
+* $\mathcal{F}$: MMF (Ampere-turns, At)
+* $N$: Number of turns
+* $I$: Current (A)
+* $H$: Magnetic field intensity (A/m)
+* $l$: Mean path length (m)
+
+
+* **Reluctance:**
+
+$$\mathcal{R} = \frac{l}{\mu A} = \frac{l}{\mu_0 \mu_r A}$$
+
+
+* $\mathcal{R}$: Reluctance (At/Wb or $H^{-1}$)
+* $A$: Cross-sectional area ($m^2$)
+
+
+* **Magnetic Flux & Density:**
+
+$$\Phi = B A \quad | \quad B = \mu H$$
+
+
+* $\Phi$: Flux (Webers, Wb)
+* $B$: Flux density (Teslas, T)
+
+
+* **Self-Inductance:**
+
+$$L = \frac{N \Phi}{I} = \frac{N^2}{\mathcal{R}}$$
+
+
+* $L$: Inductance (Henries, H)
+
+
+* **Mutual Inductance:**
+
+$$M = k \sqrt{L_1 L_2}$$
+
+
+* $M$: Mutual Inductance (H)
+* $k$: Coefficient of coupling ($0 \le k \le 1$)
+
+
+* **Series Coupled Inductors:**
+
+$$L_{eq} = L_1 + L_2 \pm 2M$$
+
+
+* $+$: Series Aiding (Currents enter same dot)
+* $-$: Series Opposing (Currents enter opposite dots)
+
+
+* **Parallel Coupled Inductors:**
+
+$$L_{eq} = \frac{L_1 L_2 - M^2}{L_1 + L_2 \mp 2M}$$
+
+
+* $-$: Parallel Aiding
+* $+$: Parallel Opposing
+
+
+* **Energy Stored in Magnetic Field:**
+
+$$W = \frac{1}{2} L I^2$$
+
+
+* $W$: Energy (Joules, J)
+
+
+
+**Practical Use:**
+
+* **Flyback Transformers:** Utilizing precision air gaps in magnetic cores to store exact quantities of energy during switch-mode power supply (SMPS) cycles.
+* **Wireless Power Transfer (Qi):** Exploiting deliberately loose coupling ($k < 0.5$) and resonant tuning to transfer energy across physical air barriers.
+* **Current Transformers (CT):** High-turn-ratio closed magnetic circuits for safe, isolated measurement of extreme AC currents.
+* **Electromechanical Relays:** Utilizing MMF to overcome air-gap reluctance, creating physical armature movement to close high-power switch contacts.
+
+**Design Trade-Offs:**
+
+* **High Permeability vs. Saturation:** Choosing a material with massive $\mu_r$ yields high inductance per turn, but drastically lowers the maximum current limit before the core saturates, crashing inductance to zero.
+* **Tight Coupling vs. Isolation Voltage:** Bringing primary and secondary windings physically closer maximizes $k$ and efficiency, but increases parasitic capacitance and degrades high-voltage dielectric isolation between mains and low-voltage DC.
+* **Air Gap vs. Efficiency:** Inserting an air gap stabilizes inductance against temperature and DC bias variations, but exponentially increases the required MMF, demanding more copper turns, thus increasing $I^2R$ resistive heating.
+
+**High-Yield Exam Triggers:**
+
+| Keyword / Visual Cue | Memory Shortcut / Translation | Typical Exam Question Format |
+| --- | --- | --- |
+| **"Air Gap added"** | $\mathcal{R}_{total} \uparrow$, $L \downarrow$, Saturation limit $\uparrow$ | Recalculate total $\mathcal{R}$ using $\mathcal{R}_{core} + \mathcal{R}_{gap}$. |
+| **"Currents enter dotted terminals"** | Series Aiding ($+2M$) | Calculate total equivalent inductance. |
+| **"Coefficient of coupling = 1"** | Ideal Transformer ($M = \sqrt{L_1 L_2}$) | Find Mutual Inductance given $L_1$ and $L_2$. |
+| **"Analogous to Resistance"** | Reluctance ($\mathcal{R}$) | Identify magnetic-electrical analog parameters. |
+| **"10% increase in effective area"** | Fringing Effect | Adjust gap area ($A_{gap} = 1.1 \times A_{core}$) before calculating gap reluctance. |
+| **"Determine Ampere-turns required"** | $\mathcal{F} = \Phi \mathcal{R}_{total}$ | Step 1: Find total $\mathcal{R}$. Step 2: Multiply by target Flux ($\Phi$). |

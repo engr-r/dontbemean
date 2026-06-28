@@ -1,0 +1,118 @@
+### 1. Knowledge (Recall & Facts)
+
+**Definitions**
+
+* **Sequential Logic**: Output depends on **present inputs** AND **past sequence of inputs** (memory).
+* **Clock (CLK)**: Periodic square wave synchronizing system state changes.
+* **Latch**: **Level-sensitive** memory element (transparent when enabled).
+* **Flip-Flop (FF)**: **Edge-triggered** memory element (samples strictly at clock transitions).
+* **Setup Time ($t_{su}$)**: Minimum time data must be stable **before** the active clock edge.
+* **Hold Time ($t_h$)**: Minimum time data must remain stable **after** the active clock edge.
+* **Metastability**: Unpredictable, intermediate voltage state caused by violating $t_{su}$ or $t_h$.
+* **Moore Machine**: FSM where output depends **ONLY** on the current state.
+* **Mealy Machine**: FSM where output depends on the current state **AND** present inputs.
+* **Modulus (Mod-N)**: Number of unique states a counter progresses through before resetting.
+
+**Critical Numbers**
+
+* **Maximum States**: $N \le 2^n$ (where $n = \text{number of flip-flops}$).
+* **Metastable Resolution Time**: Typically ranges $1\text{ ns}$ to $3\text{ ns}$ in modern CMOS.
+* **Setup/Hold Values**: $t_{su} \approx 2\text{ ns}$, $t_h \approx 0\text{ ns}$ to $1\text{ ns}$ (Standard 74HC series).
+* **JK-FF Invalid State**: None. Solves SR-FF $1,1$ race condition.
+* **SR Latch Invalid State**: $S=1, R=1$ (forces both $Q$ and $\overline{Q}$ to $0$, violating logic).
+
+**Standards & Protocols**
+
+* **IEEE/ANSI 91a-1991**: Defines the **Dynamic Indicator** (triangle symbol `>`) denoting edge-triggered clock inputs.
+* **JEDEC JESD8-C**: Defines threshold voltages preventing metastability in $3.3\text{ V}$ synchronous systems.
+* **IEEE 1164**: VHDL standard logic framework defining `U` (Uninitialized) and `X` (Unknown/Metastable) states critical for sequential simulation.
+
+---
+
+### 2. Comprehension (Concepts & Relationships)
+
+**Visual Interpretation**
+
+* **Clock Triangle (`>`)**: Indicates edge-triggered (Flip-Flop).
+* **No Triangle**: Indicates level-sensitive (Latch).
+* **Bubble on Clock (`o>`)**: Negative-edge triggered (High-to-Low transition).
+* **State Diagram**: Circles = States, Directed Arrows = Transitions (Input/Output labels).
+* **Timing Diagram**: Vertical dashed lines marking clock edges; staggered $Q$ transitions indicate cumulative propagation delay ($t_{pd}$).
+
+**Pros vs. Cons**
+
+| Architecture | Pros | Cons |
+| --- | --- | --- |
+| **Latches** | Smaller silicon area; faster operation (no clock tree). | Transparent nature causes glitch propagation. |
+| **Flip-Flops** | Strictly deterministic; immune to glitches between edges. | Higher power consumption; larger footprint. |
+| **Synchronous Counters** | All FFs clock simultaneously; fast, predictable outputs. | High fan-out load on clock; complex routing. |
+| **Asynchronous (Ripple) Counters** | Simple hardware; extremely low power (clock dividing). | Cumulative $t_{pd}$ causes decoding glitches; slow. |
+| **Moore FSM** | Safer; outputs are isolated from input glitches. | Requires more states; delayed output response. |
+| **Mealy FSM** | Fewer states; immediate output response to input. | Output highly susceptible to transient input glitches. |
+
+**Exam Traps**
+
+* **Level vs. Edge**: A latch is transparent (output follows input continuously while enabled); a flip-flop locks only on the rising/falling edge.
+* **Ripple Delay**: In asynchronous counters, the maximum delay is $n \times t_{pd}$. If asked for max frequency, use cumulative delay, not a single FF delay.
+* **JK Toggle condition**: J=$1$, K=$1$ toggles state. J=$0$, K=$0$ holds state. J=$1$, K=$0$ sets. J=$0$, K=$1$ resets.
+* **Modulus Mismatch**: A Mod-10 counter (Decade) counts from $0$ to $9$, NOT $0$ to $10$. It requires $4$ FFs ($2^4 = 16 \ge 10$).
+
+**Bottom-Line Summary**
+Sequential logic introduces the dimension of time to digital circuits through the deployment of feedback loops and synchronized clocking, transforming stateless combinational gates into robust memory elements, counters, and finite state machines (FSMs). By rigorously adhering to setup and hold time constraints to avoid metastability, engineers leverage flip-flops and registers to orchestrate complex, multi-step deterministic operations. Mastery of the distinctions between synchronous/asynchronous timing architectures and Moore/Mealy state machines forms the absolute prerequisite for designing reliable microprocessors, memory arrays, and embedded control systems.
+
+---
+
+### 3. Application (Calculations & Engineering)
+
+**Formulas**
+
+* **Maximum Clock Frequency (Synchronous)**:
+* Equation: $f_{\max} = \frac{1}{t_{pd(FF)} + t_{comb} + t_{su}}$
+* Variables: $t_{pd(FF)} = \text{FF propagation delay}$, $t_{comb} = \text{combinational logic delay}$, $t_{su} = \text{setup time}$.
+* Physical meaning: The absolute speed limit of a digital system before metastability occurs.
+
+
+* **Maximum Clock Frequency (Asynchronous/Ripple)**:
+* Equation: $f_{\max} = \frac{1}{n \cdot t_{pd(FF)}}$
+* Variables: $n = \text{number of flip-flops in cascade}$.
+* Physical meaning: Frequency bottleneck dictated by the "ripple" effect of serial clocking.
+
+
+* **Flip-Flop Requirement**:
+* Equation: $2^{n-1} < M \le 2^n$
+* Variables: $n = \text{minimum number of FFs}$, $M = \text{target Modulus}$.
+* Physical meaning: Hardware sizing for counters and state machines.
+
+
+* **Characteristic Equations**:
+* SR Flip-Flop: $Q_{next} = S + \overline{R} \cdot Q$
+* D Flip-Flop: $Q_{next} = D$
+* JK Flip-Flop: $Q_{next} = J \cdot \overline{Q} + \overline{K} \cdot Q$
+* T Flip-Flop: $Q_{next} = T \oplus Q$
+
+
+
+**Practical Use**
+
+* **Shift Registers (SISO, SIPO, PISO, PIPO)**: Core hardware for SPI, $I^2C$, and UART communication protocols (Serial-to-Parallel conversion).
+* **Frequency Dividers**: T-Flip Flops cascaded to step down high-frequency oscillator clocks (e.g., generating $1\text{ Hz}$ RTC from $32.768\text{ kHz}$ crystal).
+* **Debouncing Circuits**: SR Latches used to clean up mechanical switch "bounce" into a single, clean logic transition.
+* **SRAM (Static RAM)**: Cross-coupled inverters (latches) holding volatile logic states without refresh cycles.
+
+**Design Trade-Offs**
+
+* **Clock Skew vs. Routing**: High-speed synchronous designs suffer from clock skew (clock arriving at FFs at different times due to wire length). Requires power-hungry "clock trees" (H-trees) to balance delays.
+* **State Encoding**: Binary encoding (min FFs, max combinational logic) vs. One-Hot encoding (max FFs, minimal logic, faster speed, safer FPGA implementation).
+
+**High-Yield Exam Triggers**
+
+* **"Output depends ONLY on present state"** $\rightarrow$ **Moore Machine**
+* **"Race-around condition"** $\rightarrow$ **Level-triggered JK Flip-Flop** (solved by Master-Slave FF)
+* **"Universal Flip-Flop"** $\rightarrow$ **JK Flip-Flop** (can mimic SR, D, and T)
+* **"Delay Flip-Flop / Transparent"** $\rightarrow$ **D Latch**
+* **"Toggle state"** $\rightarrow$ **T Flip-Flop** (or JK with $1,1$)
+* **"Divides frequency by 2"** $\rightarrow$ **Single T Flip-Flop**
+* **"Mod-10 counter"** $\rightarrow$ **Decade Counter / BCD Counter**
+* **"Minimum time before clock edge"** $\rightarrow$ **Setup time ($t_{su}$)**
+* **"Intermediate, unpredictable voltage"** $\rightarrow$ **Metastability**
+* **"Cumulative delay / Glitches"** $\rightarrow$ **Asynchronous (Ripple) Counter**

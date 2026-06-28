@@ -1,0 +1,133 @@
+### **Topic: Electronic Systems and Design - Audio-Video and Lighting Controls**
+
+---
+
+### **1. Knowledge (Recall & Facts)**
+
+**Definitions**
+
+* **Acoustics**: Science of sound behavior in physical spaces.
+* **Transducer**: Device converting energy (Microphone: Acoustic $\rightarrow$ Electrical; Speaker: Electrical $\rightarrow$ Acoustic).
+* **Balanced Audio**: 3-wire signal transmission (Hot, Cold, Ground); utilizes **Common Mode Rejection (CMR)** to eliminate induced noise.
+* **DMX512 (Digital Multiplex)**: Asynchronous serial digital protocol for theatrical/architectural lighting control.
+* **DALI (Digital Addressable Lighting Interface)**: 2-wire bidirectional protocol for dimmable building lighting.
+* **PWM (Pulse Width Modulation)**: Rapid switching technique for LED dimming.
+* **HDCP (High-bandwidth Digital Content Protection)**: Encryption protocol preventing unauthorized copying of digital A/V over HDMI/DisplayPort.
+* **Color Rendering Index (CRI)**: Quantitative measure ($0$ to $100$) of a light source revealing true colors of objects.
+* **Luminous Flux**: Total perceived power of light emitted (**Lumens**).
+* **Illuminance**: Total luminous flux incident on a surface (**Lux**).
+
+**Critical Numbers**
+
+* **Human Hearing Range**: **$20\text{ Hz}$ to $20\text{ kHz}$**.
+* **Threshold of Hearing ($p_0$)**: **$20\text{ }\mu\text{Pa}$** ($0\text{ dB}$ SPL).
+* **Speed of Sound ($v$)**: **$\approx 343\text{ m/s}$** at $20^\circ\text{C}$.
+* **DMX512 Capacity**: **$512$** channels per universe; **$8$-bit** resolution ($0$-$255$ values); baud rate **$250\text{ kbps}$**.
+* **DMX Termination**: **$120\text{ }\Omega$** resistor across Data+ and Data-.
+* **DALI Capacity**: **$64$** individual addresses; **$16$** groups per loop; **$1200\text{ bps}$** baud rate.
+* **Professional Audio Line Level**: **$+4\text{ dBu}$** ($1.228\text{ V}_{rms}$).
+* **Consumer Audio Line Level**: **$-10\text{ dBV}$** ($0.316\text{ V}_{rms}$).
+
+**Standards & Protocols**
+
+* **EIA-485 (RS-485)**: Physical layer for DMX512.
+* **AES3 / AES/EBU**: Standard for digital audio transmission ($2$ channels, up to $192\text{ kHz}$, $24$-bit).
+* **Dante (Digital Audio Network Through Ethernet)**: Uncompressed, multi-channel audio over IP (AoIP) using standard IP networking.
+* **IEC 62386**: International standard defining DALI protocols.
+* **SMPTE 2110**: Suite of standards for professional media (AV) over managed IP networks.
+* **NFPA 101**: Life Safety Code (mandates fire alarm system overrides for AV and lighting during emergencies).
+
+---
+
+### **2. Comprehension (Concepts & Relationships)**
+
+**Visual Interpretation**
+
+* **Equal-Loudness Contour (Fletcher-Munson)**: Curves demonstrating human ear insensitivity to low and extremely high frequencies at low volumes.
+* **Microphone Polar Patterns**:
+* *Omnidirectional*: Perfect circle (picks up everywhere).
+* *Cardioid*: Heart-shaped (front focus, rear rejection).
+* *Figure-8*: Bi-directional (front and rear pickup, side rejection).
+
+
+* **Inverse Square Law Curve**: Steep exponential decay curve plotting intensity against distance ($1/d^2$).
+* **CIE 1931 Color Space**: Horseshoe-shaped diagram plotting visible colors; used for calibrating LED RGB gamut mapping.
+
+**Pros vs. Cons**
+
+| Protocol / Tech | Advantages | Disadvantages |
+| --- | --- | --- |
+| **DMX512** | Universal lighting standard; fast refresh rate; robust (RS-485). | Unidirectional (no error feedback); limited to 512 channels per universe. |
+| **DALI** | Bidirectional (reports lamp failure); topology-free wiring. | Extremely slow response time ($1200\text{ bps}$); unsuitable for fast dynamic effects. |
+| **Dante (AoIP)** | Replaces massive analog copper snakes with single Cat6; routable via software. | Requires precise IT network configuration (QoS, IGMP snooping); inherent network latency. |
+| **Balanced Audio** | Rejects EMI/RFI noise; suitable for long cable runs ($>100\text{ m}$). | Requires $3$ conductors and specialized differential amplifier circuits. |
+
+**Exam Traps**
+
+* **Lux vs. Lumen Trap**: **Lumen** is what the bulb emits. **Lux** is what hits the desk. ($1\text{ Lux} = 1\text{ Lumen/m}^2$).
+* **Audio Power vs. Voltage Gain Trap**: Doubling voltage adds **$6\text{ dB}$**. Doubling power adds **$3\text{ dB}$**.
+* **DMX Cable Trap**: Using standard microphone cables (XLR $3$-pin, $\approx 70\text{ }\Omega$) for DMX instead of true $120\text{ }\Omega$ digital cable causes data reflections and flickering.
+* **Phantom Power Trap**: $+48\text{V DC}$ flows *up* the microphone cable. Only condenser mics require it; dynamic mics ignore it, but ribbon mics can be destroyed by it if miswired.
+
+**Bottom-Line Summary**
+Modern AV and lighting control systems are vast, integrated networks functioning primarily over specialized digital protocols like DMX512 and Dante, relying fundamentally on differential signaling (RS-485, Balanced Audio) to maintain signal integrity over long distances. The transition from legacy analog infrastructure to packet-switched network topologies demands strict mastery of IT networking, signal conversion parameters (ADC/DAC), and robust fail-safe physical layer design. Crucially, all architectural multimedia systems operate subordinately to life-safety infrastructure, requiring hardware-level overrides to guarantee illuminated egress and acoustic clarity for emergency public address during critical alarm states.
+
+---
+
+### **3. Application (Calculations & Engineering)**
+
+**Formulas**
+
+* **Sound Pressure Level (SPL)**:
+$L_p = 20 \log_{10}\left(\frac{p}{p_0}\right)$
+* $L_p$: Sound Pressure Level ($\text{dB}$)
+* $p$: Root mean square sound pressure ($\text{Pa}$)
+* $p_0$: Reference sound pressure ($20\text{ }\mu\text{Pa}$)
+* *Meaning*: Converts linear pressure into logarithmic human perception scale.
+
+
+* **Inverse Square Law (Acoustics & Optics)**:
+$I_2 = I_1 \left(\frac{d_1}{d_2}\right)^2$
+* $I_1, I_2$: Intensities at distances 1 and 2 ($\text{W/m}^2$, $\text{Lux}$)
+* $d_1, d_2$: Distances from the point source ($\text{m}$)
+* *Meaning*: Intensity drops geometrically. Doubling the distance yields one-quarter the intensity ($-6\text{ dB}$ for sound).
+
+
+* **Wavelength**:
+$\lambda = \frac{v}{f}$
+* $\lambda$: Wavelength ($\text{m}$)
+* $v$: Velocity of sound ($\approx 343\text{ m/s}$)
+* $f$: Frequency ($\text{Hz}$)
+* *Meaning*: Calculates physical size of audio waves (crucial for room acoustic treatment and subwoofer placement).
+
+
+* **Amplifier Power Gain**:
+$G_{dB} = 10 \log_{10}\left(\frac{P_{out}}{P_{in}}\right)$
+* $G_{dB}$: Gain in decibels
+* $P_{out}$: Output power ($\text{W}$)
+* $P_{in}$: Input power ($\text{W}$)
+
+
+
+**Practical Use**
+
+* **IoT Lighting Nodes**: Utilizing **ESP32 microcontrollers** executing Art-Net/sACN (DMX over UDP) to drive dense WS2812B addressable LED matrices for architectural facades.
+* **Emergency Muting (Life Safety)**: Contact closures from the Fire Alarm Control Panel (FACP) tied to an AV DSP processor, instantly muting theatrical audio and driving all DMX house lights to $100\%$ intensity upon smoke detection.
+* **Acoustic Feedback Elimination**: Using parametric EQs to notch out specific resonant room frequencies ($\lambda$) where a microphone loops with the PA speakers.
+
+**Design Trade-Offs**
+
+* **Video Compression vs. Latency**: H.264/H.265 requires low bandwidth but adds heavy encoding delay. Uncompressed video (SDI / SMPTE 2110) has zero latency but requires massive $10\text{ Gbps}$ to $25\text{ Gbps}$ network backbones.
+* **PWM Dimming vs. Camera Flicker**: Low-frequency PWM ($<1\text{ kHz}$) is cheap and runs cool but causes severe banding/flicker on broadcast video cameras. High-frequency PWM mitigates flicker but causes higher thermal switching losses in the driving MOSFETs.
+
+**High-Yield Exam Triggers**
+
+| Keyword / Looksfam | Visual Cue / Setup | Memory Shortcut | Typical Board Question |
+| --- | --- | --- | --- |
+| **512 channels, RS-485** | $3$-pin or $5$-pin XLR on lights | **DMX** = **D**igital **M**ultiple**X** | "Which serial protocol is standard for stage lighting control utilizing $512$ channels?" |
+| **Heart-shaped** | Microphone pickup graph | **Cardioid** = **Cardio** (Heart) | "A microphone with maximum sensitivity at the front and total rejection at the rear is..." |
+| **$20\text{ }\mu\text{Pa}$** | Threshold of hearing math | **$0\text{ dB}$ SPL base** | "What is the standard reference pressure used in computing Sound Pressure Level?" |
+| **Topology-free, 64 addresses** | 2-wire commercial lighting | **DALI** = Commercial Dimming | "Which protocol supports $64$ short addresses and bidirectional lamp status reporting?" |
+| **Hot, Cold, Ground** | XLR cable schematic | **Balanced** = CMR (Noise rejection) | "To eliminate induced common-mode noise over long cable runs, AV systems use..." |
+| **$-6\text{ dB}$ per doubling** | Sound dropping off over distance | **Inverse Square** = Half distance, $+6\text{ dB}$ | "If the distance from a point source speaker is doubled, the SPL drops by..." |
+| **Audio over IP** | Cat6 instead of analog snakes | **Dante** / AES67 | "Which uncompressed digital audio protocol routes multichannel signals over standard Ethernet?" |

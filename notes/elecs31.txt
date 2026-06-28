@@ -1,0 +1,174 @@
+### **1. Knowledge (Recall & Facts)**
+
+**Definitions:**
+
+* **Electrostatics:** Study of stationary electric charges and their associated steady electric fields ($\vec{E}$).
+* **Magnetostatics:** Study of steady electric currents (Direct Current) and their associated steady magnetic fields ($\vec{H}$).
+* **Coulomb’s Law:** Force between two point charges is directly proportional to the product of their magnitudes and inversely proportional to the square of the distance between them.
+* **Gauss’s Law (Electric):** Total electric flux leaving a closed surface equals the total charge enclosed by that surface.
+* **Electric Field Intensity ($\vec{E}$):** Force per unit charge experienced by a stationary positive test charge.
+* **Electric Flux Density ($\vec{D}$):** Measure of the concentration of electric field lines, independent of the dielectric medium.
+* **Biot-Savart Law:** Differential magnetic field intensity produced by a differential current element.
+* **Ampere’s Circuital Law:** The line integral of magnetic field intensity around a closed path equals the total direct current enclosed.
+* **Lorentz Force:** Total force experienced by a moving charge in the presence of both electric and magnetic fields.
+* **Equipotential Surface:** A region where every point has the same electric potential; electric field lines are always perpendicular to this surface.
+* **Magnetic Vector Potential ($\vec{A}$):** Mathematical auxiliary tool used to calculate magnetic flux density; defined such that $\vec{B} = \nabla \times \vec{A}$.
+
+**Critical Numbers:**
+
+* **Speed of Light ($c$):** $3 \times 10^8$ m/s
+* **Permittivity of Free Space ($\epsilon_0$):** $8.854 \times 10^{-12}$ F/m (or $\frac{1}{36\pi} \times 10^{-9}$ F/m)
+* **Permeability of Free Space ($\mu_0$):** $4\pi \times 10^{-7}$ H/m
+* **Elementary Charge ($e$):** $-1.602 \times 10^{-19}$ C
+* **Electron Mass ($m_e$):** $9.11 \times 10^{-31}$ kg
+* **Proton Mass ($m_p$):** $1.67 \times 10^{-27}$ kg
+* **Intrinsic Impedance of Free Space ($\eta_0$):** $377\Omega$ (or $120\pi\Omega$)
+
+**Standards & Protocols:**
+
+* **IEEE C95.1:** Standard for Safety Levels with Respect to Human Exposure to Electric, Magnetic, and Electromagnetic Fields, 0 Hz to 300 GHz.
+* **IEC 60404:** International standard for the classification and measurement of magnetic materials.
+* **IEEE 299:** Standard Method for Measuring the Effectiveness of Electromagnetic Shielding Enclosures.
+
+---
+
+### **2. Comprehension (Concepts & Relationships)**
+
+**Visual Interpretation:**
+
+* **Electric Field Lines:** Originate on positive charges, terminate on negative charges. **Never form closed loops** in electrostatics. Density indicates field strength.
+* **Magnetic Field Lines:** Continuous, unbroken loops. **No magnetic monopoles** exist. Direction governed by the Right-Hand Rule.
+* **Dielectric Boundary:** Electric flux density normal component ($D_n$) is continuous. Electric field tangential component ($E_t$) is continuous.
+* **Magnetic Boundary:** Magnetic flux density normal component ($B_n$) is continuous. Magnetic field tangential component ($H_t$) is continuous (if no surface current).
+* **Hysteresis Loop (B-H Curve):** Defines magnetic material characteristics. Wide loop = hard magnetic material (permanent magnets). Narrow loop = soft magnetic material (transformer cores).
+
+**Pros vs. Cons (Electrostatic vs. Magnetostatic Energy Storage):**
+
+| Feature | Capacitors (Electrostatic) | Inductors (Magnetostatic) |
+| --- | --- | --- |
+| **Energy Storage Mechanism** | Electric field in a dielectric | Magnetic field in a core/air gap |
+| **Response to Change** | Opposes change in **voltage** | Opposes change in **current** |
+| **Losses** | Dielectric leakage, Equivalent Series Resistance (ESR) | Core losses (eddy currents, hysteresis), Copper losses ($I^2R$) |
+| **Energy Density** | Generally lower | Generally higher (especially with ferromagnetic cores) |
+| **Failure Mode** | Dielectric breakdown (voltage puncture) | Magnetic saturation (current limit) |
+
+**Exam Traps:**
+
+* **Permittivity vs. Permeability Missing:** Forgetting to multiply $\epsilon_0$ by the relative permittivity ($\epsilon_r$) in dielectrics, or $\mu_0$ by relative permeability ($\mu_r$) in magnetic cores.
+* **Vector Cross Products:** Reversing the order of $\vec{v} \times \vec{B}$ in Lorentz force calculations, resulting in a sign error (opposite direction).
+* **Gauss's Law Misapplication:** Attempting to use Gauss's Law for non-symmetric charge distributions (requires pure spherical, cylindrical, or planar symmetry to easily solve for $E$).
+* **Infinite Wire vs. Finite Wire:** Using the infinite line formula ($\frac{I}{2\pi r}$) for a distinctly finite wire segment problem.
+* **Work Done on a Closed Path:** Forgetting that work done moving a charge around any closed loop in a steady electric field is exactly **zero** (conservative field).
+
+**Bottom-Line Summary:**
+Steady electric and magnetic fields form the conservative, time-invariant foundation of electromagnetics, governed exclusively by static charge distributions and steady direct currents. Electrostatics relies on Gauss's Law to extract field intensities from symmetric geometries and define spatial potential differences, driving capacitor design and dielectric insulation analysis. Magnetostatics leverages Ampere's Circuital Law and the Biot-Savart Law to map continuous flux loops generated by steady currents, dictating the operational physics of inductors, electromagnets, and fundamental electromechanical force generation via the Lorentz interactions.
+
+---
+
+### **3. Application (Calculations & Engineering)**
+
+**Formulas:**
+
+* **Coulomb's Law (Force between point charges):**
+
+$$\vec{F} = \frac{Q_1 Q_2}{4\pi\epsilon R^2} \hat{a}_R$$
+
+
+* $Q$: Charge (C), $R$: Distance (m), $\hat{a}_R$: Unit vector, $\epsilon$: Permittivity (F/m). Physical meaning: Electrostatic force magnitude and direction.
+
+
+* **Electric Field Intensity:**
+
+$$\vec{E} = \frac{\vec{F}}{q} = \frac{Q}{4\pi\epsilon R^2} \hat{a}_R$$
+
+
+* $\vec{E}$: Electric Field (V/m). Physical meaning: Force per unit positive charge.
+
+
+* **Electric Flux Density:**
+
+$$\vec{D} = \epsilon \vec{E}$$
+
+
+* $\vec{D}$: Flux Density (C/m$^2$). Physical meaning: Flux independent of the medium.
+
+
+* **Gauss's Law (Integral Form):**
+
+$$\oint \vec{D} \cdot d\vec{S} = Q_{enclosed}$$
+
+
+* $d\vec{S}$: Differential surface vector. Physical meaning: Total flux through closed surface equals enclosed charge.
+
+
+* **Electric Potential Difference:**
+
+$$V_{AB} = -\int_{A}^{B} \vec{E} \cdot d\vec{l}$$
+
+
+* $V$: Potential (V). Physical meaning: Work done per unit charge moving from A to B.
+
+
+* **Biot-Savart Law:**
+
+$$d\vec{H} = \frac{I d\vec{l} \times \hat{a}_R}{4\pi R^2}$$
+
+
+* $d\vec{H}$: Differential magnetic field (A/m), $I$: Current (A). Physical meaning: Field generated by a tiny wire segment.
+
+
+* **Ampere's Circuital Law:**
+
+$$\oint \vec{H} \cdot d\vec{l} = I_{enclosed}$$
+
+
+* Physical meaning: Sum of magnetic field along a closed loop equals the current piercing the loop.
+
+
+* **Magnetic Flux Density:**
+
+$$\vec{B} = \mu \vec{H}$$
+
+
+* $\vec{B}$: Magnetic Flux Density (Tesla or Wb/m$^2$), $\mu$: Permeability (H/m).
+
+
+* **Lorentz Force Equation:**
+
+$$\vec{F} = q(\vec{E} + \vec{v} \times \vec{B})$$
+
+
+* $\vec{v}$: Velocity (m/s). Physical meaning: Total electromagnetic force on a moving charge.
+
+
+* **Energy Stored in Fields:**
+
+$$W_E = \frac{1}{2} \int_v \epsilon |\vec{E}|^2 dv \quad \text{(Electric)}$$
+
+
+$$W_M = \frac{1}{2} \int_v \mu |\vec{H}|^2 dv \quad \text{(Magnetic)}$$
+
+
+
+**Practical Use:**
+
+* **Electrostatics:** Inkjet printers (charge deflection), Cathode Ray Tubes (electron beam steering), electrostatic precipitators (industrial smoke filtering), capacitive touch screens.
+* **Magnetostatics:** Hall effect sensors (proximity switching), mass spectrometers (particle separation by mass-to-charge ratio), relays, solenoids, DC motors, MRI machine primary magnets.
+
+**Design Trade-Offs:**
+
+* **Dielectric Breakdown vs. Capacitance:** Maximizing capacitance requires very thin dielectric layers ($C = \frac{\epsilon A}{d}$), but thinning the layer severely lowers the maximum voltage rating before dielectric breakdown (arcing) occurs.
+* **Magnetic Core Saturation vs. Inductance:** Using highly permeable materials (like Ferrite or Silicon Steel) massively increases inductance and confines the magnetic field, but heavy currents will saturate the core, dropping $\mu_r$ drastically and collapsing the inductance.
+* **Shielding Material Weight vs. Effectiveness:** High-frequency shielding requires highly conductive materials (copper/aluminum mesh), while static/low-frequency magnetic shielding requires heavy, bulky high-permeability materials (Mu-metal).
+
+**High-Yield Exam Triggers:**
+
+| Keyword / Visual Cue | Memory Shortcut / Translation | Typical Exam Question Format |
+| --- | --- | --- |
+| **"Infinite line of charge"** | Cylindrical symmetry. | Calculate $\vec{E}$ using $E = \frac{\rho_L}{2\pi\epsilon r}$. |
+| **"Infinite sheet of charge"** | $E$ is independent of distance. | Calculate $\vec{E}$ using $E = \frac{\rho_S}{2\epsilon}$. |
+| **"Long straight wire"** | Ampere's Law application. | Calculate $\vec{H}$ using $H = \frac{I}{2\pi r}$. |
+| **"Solenoid" / "Coil"** | Magnetic field concentrated inside. | Calculate interior $\vec{B}$ using $B = \mu n I$. |
+| **"Charge moving parallel to B-field"** | Cross product $\vec{v} \times \vec{B} = 0$. | What is the magnetic force? (Answer: **Zero**). |
+| **"Work done on closed path"** | Conservative electric field. | Calculate work moving a charge in a full circle. (Answer: **0 Joules**). |
+| **"Force between two parallel wires"** | Attract if currents same direction. | Calculate force per unit length: $\frac{F}{L} = \frac{\mu_0 I_1 I_2}{2\pi d}$. |

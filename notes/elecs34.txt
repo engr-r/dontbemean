@@ -1,0 +1,137 @@
+### **1. Knowledge (Recall & Facts)**
+
+**Definitions:**
+
+* **Time-Varying Fields:** Electric and magnetic fields dynamically changing with time, mutually inducing one another.
+* **Faraday’s Law of Induction:** A time-varying magnetic field induces an electromotive force (EMF) and a circulating electric field.
+* **Lenz’s Law:** Induced EMF generates a current whose magnetic field **opposes** the original change in magnetic flux.
+* **Transformer EMF:** EMF induced by a time-varying magnetic field in a **stationary** loop.
+* **Motional EMF:** EMF induced by a **moving** loop in a static magnetic field.
+* **Displacement Current ($\vec{J}_d$):** Maxwell’s pivotal addition to Ampere’s Law; represents the rate of change of electric flux density.
+* **Time-Harmonic Fields:** Fields varying sinusoidally with time, analyzed using steady-state **phasors**.
+* **Retarded Potentials:** Time delay in electromagnetic effects at a distance due to the finite speed of light.
+* **Maxwell’s Equations:** Four fundamental equations (Faraday, Ampere-Maxwell, Gauss-Electric, Gauss-Magnetic) governing all macroscopic electromagnetism.
+* **Continuity Equation:** Mathematical statement of the **conservation of charge**.
+
+**Critical Numbers:**
+
+* **Speed of Light ($c$):** $3 \times 10^8$ m/s
+* **Free Space Permittivity ($\epsilon_0$):** $8.854 \times 10^{-12}$ F/m
+* **Free Space Permeability ($\mu_0$):** $4\pi \times 10^{-7}$ H/m
+* **Intrinsic Impedance of Free Space ($\eta_0$):** $377\ \Omega$ (or $120\pi\ \Omega$)
+* **Divergence of Magnetic Flux ($\nabla \cdot \vec{B}$):** Exactly **0** (No magnetic monopoles).
+
+**Standards & Protocols:**
+
+* **FCC Part 15:** US regulations for unintentional and intentional radiated electromagnetic emissions (EMI/EMC).
+* **CISPR 11 / EN 55011:** Industrial, scientific, and medical (ISM) radio-frequency disturbance characteristics.
+* **IEEE C95.1:** Safety standard for human exposure to time-varying electromagnetic fields ($0\text{ Hz}$ to $300\text{ GHz}$).
+
+---
+
+### **2. Comprehension (Concepts & Relationships)**
+
+**Visual Interpretation:**
+
+* **Maxwell’s Curl Equations:** Time-varying $\vec{B}$ creates closed loops of $\vec{E}$ (Faraday). Time-varying $\vec{E}$ creates closed loops of $\vec{H}$ (Ampere-Maxwell). **Orthogonal, self-sustaining chain reaction**.
+* **Displacement Current in a Capacitor:** Conduction current stops at the plates; displacement current flows *through* the dielectric, maintaining continuous total current.
+* **Wave Propagation Direction:** Pointing vector ($\vec{E} \times \vec{H}$) specifies power flow orthogonal to both field vectors.
+
+**Pros vs. Cons (Current Types in Time-Varying Fields):**
+
+| Current Type | Pros / Characteristics | Cons / Limitations |
+| --- | --- | --- |
+| **Conduction Current ($\vec{J}_c$)** | Physical movement of free electrons; drives standard circuitry. | Causes $I^2R$ (Joule heating) power losses; cannot cross dielectrics. |
+| **Displacement Current ($\vec{J}_d$)** | Allows AC current "flow" through capacitors; enables EM wave propagation in vacuums. | Carries zero real power (purely reactive); zero physical charge transfer. |
+| **Eddy Currents** | Useful for induction heating and magnetic braking. | Major source of core loss in AC transformers and motors. |
+
+**Exam Traps:**
+
+* **Missing the Minus Sign:** Forgetting Lenz's Law ($-d\Phi/dt$) leads to inverted polarities in EMF calculations.
+* **Static Ampere’s Law Application:** Using $\nabla \times \vec{H} = \vec{J}$ for AC circuits (omitting $\partial \vec{D} / \partial t$) causes massive errors at high frequencies.
+* **Capacitor DC vs. AC:** Assuming current through a capacitor is always zero. (DC = true, AC = false due to displacement current).
+* **Phasor Time Derivative:** Forgetting that taking the time derivative ($\partial/\partial t$) in the time domain equates to multiplying by **$j\omega$** in the phasor domain.
+* **Moving vs. Stationary Loop:** Applying transformer EMF formula to a moving coil problem (must use $\vec{v} \times \vec{B}$ for motional EMF).
+
+**Bottom-Line Summary:**
+Time-varying electromagnetic fields bridge the isolated realms of electrostatics and magnetostatics, formalized by Maxwell's Equations, where a changing magnetic field induces a circulating electric field (Faraday's Law) and a time-varying electric field generates a circulating magnetic field via displacement current (Ampere-Maxwell Law). This absolute mathematical symmetry dictates the existence of self-propagating electromagnetic waves—freeing energy from physical conductors—and establishes the foundational framework for all high-frequency AC circuit design, antenna radiation theory, and modern wireless communications.
+
+---
+
+### **3. Application (Calculations & Engineering)**
+
+**Formulas:**
+
+* **Faraday’s Law (Integral Form):**
+
+$$V_{emf} = \oint \vec{E} \cdot d\vec{l} = -\frac{d}{dt} \int_S \vec{B} \cdot d\vec{S}$$
+
+
+* $V_{emf}$: Electromotive Force (V); $\vec{B}$: Magnetic Flux Density (T).
+* *Meaning:* Voltage induced equals the negative rate of change of magnetic flux.
+
+
+* **Motional EMF:**
+
+$$V_{emf} = \oint (\vec{v} \times \vec{B}) \cdot d\vec{l}$$
+
+
+* $\vec{v}$: Velocity vector (m/s).
+* *Meaning:* Voltage generated by a conductor cutting through magnetic field lines.
+
+
+* **Displacement Current Density ($\vec{J}_d$):**
+
+$$\vec{J}_d = \frac{\partial \vec{D}}{\partial t}$$
+
+
+* $\vec{J}_d$: Current density (A/m$^2$); $\vec{D}$: Electric Flux Density (C/m$^2$).
+
+
+* **Maxwell’s Equations (Differential / Point Form - Time Domain):**
+1. **Faraday:** $\nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t}$
+2. **Ampere-Maxwell:** $\nabla \times \vec{H} = \vec{J}_c + \frac{\partial \vec{D}}{\partial t}$
+3. **Gauss (Electric):** $\nabla \cdot \vec{D} = \rho_v$
+4. **Gauss (Magnetic):** $\nabla \cdot \vec{B} = 0$
+
+
+* **Maxwell’s Equations (Differential / Point Form - Phasor Domain):**
+1. $\nabla \times \vec{E}_s = -j\omega\mu\vec{H}_s$
+2. $\nabla \times \vec{H}_s = (\sigma + j\omega\epsilon)\vec{E}_s$
+3. $\nabla \cdot \vec{D}_s = \rho_{vs}$
+4. $\nabla \cdot \vec{B}_s = 0$
+
+
+* **Continuity of Current Equation:**
+
+$$\nabla \cdot \vec{J} = -\frac{\partial \rho_v}{\partial t}$$
+
+
+* $\vec{J}$: Volume current density; $\rho_v$: Volume charge density.
+* *Meaning:* Current diverging from a point equals the rate of charge depletion at that point.
+
+
+
+**Practical Use:**
+
+* **Transformers:** Utilizing transformer EMF to step-up/step-down AC grid voltages.
+* **Electric Generators:** Utilizing motional EMF to convert mechanical turbine rotation into grid AC power.
+* **RFID & Inductive Charging:** Near-field magnetic coupling utilizing Faraday's law at high frequencies.
+* **Antennas:** Utilizing time-varying conduction currents to launch self-sustaining displacement currents (EM waves) into free space.
+
+**Design Trade-Offs:**
+
+* **Frequency vs. Radiation Leakage:** Increasing operational frequency ($\omega$) allows for smaller inductors/capacitors and faster data rates, but mathematically amplifies the displacement current ($\partial \vec{D}/\partial t$), turning standard PCB traces into unintended radiating antennas (EMI issues).
+* **Transformer Core vs. Eddy Currents:** Time-varying magnetic fields induce circulating currents inside the transformer core itself (Faraday's Law). Solid cores suffer massive heat loss; laminated cores disrupt the $d\vec{l}$ path, minimizing loss but increasing manufacturing cost.
+* **Conductor Size vs. Skin Effect:** At high frequencies, time-varying internal magnetic fields force conduction current entirely to the conductor's surface. Thicker wires do not lower AC resistance; designers must use expensive Litz wire or hollow tubing.
+
+**High-Yield Exam Triggers:**
+
+| Keyword / Visual Cue | Memory Shortcut / Translation | Typical Exam Question Format |
+| --- | --- | --- |
+| **"Stationary loop, changing B-field"** | Transformer EMF | Calculate induced voltage ($V_{emf} = -A(dB/dt)$). |
+| **"Moving conductor, static B-field"** | Motional EMF | Calculate induced voltage using $\vec{v} \times \vec{B}$. |
+| **"Current through a capacitor"** | Displacement Current ($\vec{J}_d$) | Calculate $I_d$ using $\epsilon A (\partial E / \partial t)$ or $C(dv/dt)$. |
+| **"Divergence of B" / $\nabla \cdot \vec{B}$** | Always **0** | Identify the equation proving no magnetic monopoles. |
+| **"Modified Ampere's Law"** | Addition of $\partial \vec{D} / \partial t$ | Which term did Maxwell add to satisfy the continuity equation? |
+| **"Phasor equivalent of $\partial/\partial t$"** | Multiply by **$j\omega$** | Convert a time-domain Maxwell equation to frequency domain. |

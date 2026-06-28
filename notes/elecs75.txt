@@ -1,0 +1,106 @@
+### 1. Knowledge (Recall & Facts)
+
+**Definitions**
+
+* **Asynchronous Sequential Circuit**: State machine operating **without a global clock**; state transitions triggered directly by input variable changes.
+* **Fundamental Mode**: Operation constraint requiring **only one input variable** to change at a time, with sufficient delay before the next change to allow the circuit to reach a stable state.
+* **Pulse Mode**: Inputs act as discrete pulses; width must be long enough to trigger state change but short enough to vanish before the next state transition completes.
+* **Flow Table**: Asynchronous equivalent of a state transition table; relates present state and inputs to next state and outputs.
+* **Primitive Flow Table**: Specialized flow table containing exactly **one stable state per row**.
+* **Stable State**: Condition where next state equals present state ($Y = y$).
+* **Race Condition**: Simultaneous transition of **two or more state variables** due to a single input change.
+* **Non-Critical Race**: Race condition where all possible transition paths converge to the **same final stable state**.
+* **Critical Race**: Race condition where unequal propagation delays cause paths to diverge into **different final stable states** (fatal error).
+* **Cycle**: Deliberate sequence of unstable states before settling into a stable state.
+* **Static Hazard**: Transient output glitch (wrong logic level momentarily) when inputs change, while output should remain constant.
+* **Dynamic Hazard**: Multiple transient transitions (e.g., $0 \rightarrow 1 \rightarrow 0 \rightarrow 1$) when output should change state only once.
+* **Essential Hazard**: Timing error specific to asynchronous circuits; caused by unequal delays along different paths from a single input variable, causing the circuit to transition to the wrong state.
+
+**Critical Numbers**
+
+* **Adjacency Requirement**: State assignments must have a **Hamming Distance of $1$** for transitioning states to avoid races.
+* **Minimum Pulse Width ($t_w$)**: Must exceed the sum of internal propagation delays ($t_w > \Sigma t_{pd}$).
+* **Fundamental Mode Setup**: Input change frequency $f_{in} < \frac{1}{t_{settle}}$.
+
+**Standards & Protocols**
+
+* **Huffman Model**: Standard architectural model for asynchronous circuits (Combinational Logic block + Feedback Delay lines).
+* **Muller C-element**: Fundamental logic gate protocol for asynchronous handshaking (output changes only when all inputs match).
+* **GALS (Globally Asynchronous Locally Synchronous)**: Modern SoC protocol utilizing asynchronous wrappers around synchronous cores.
+
+---
+
+### 2. Comprehension (Concepts & Relationships)
+
+**Visual Interpretation**
+
+* **Flow Table Circles**: Circled entries denote **stable states**; uncircled denote **unstable states** (transient).
+* **Feedback Loops**: Absence of flip-flops in schematic; direct wiring from combinational logic outputs back to inputs, implicitly creating memory via gate propagation delay.
+* **Timing Diagrams**: Asymmetrical pulse widths; varying $t_{pd}$ between gates visibly causing micro-second glitches (hazards).
+* **K-map Hazard Visuals**: Adjacent 1-groups in SOP K-maps that **do not overlap** indicate potential static-1 hazards.
+
+**Pros vs. Cons**
+
+| Feature | Pros | Cons |
+| --- | --- | --- |
+| **Speed** | Operates at absolute physical speed limit of logic gates (average-case delay). | Highly susceptible to physical wire routing delays. |
+| **Power Consumption** | Zero dynamic clock power dissipation (activates only on input change). | High static power in certain implementations. |
+| **Clock Skew** | **Immune**; eliminates the need for complex, power-hungry clock distribution networks. | Vulnerable to metastable states if inputs violate fundamental mode. |
+| **Design Complexity** | Modular handshaking potential for independent system integration. | Extreme difficulty in verification; demands rigorous state reduction and hazard elimination. |
+
+**Exam Traps**
+
+* **Race vs. Hazard**: A **race** is a state variable assignment problem; a **hazard** is a combinational logic propagation delay problem.
+* **Dynamic Hazard Prerequisite**: Dynamic hazards can **only** occur in circuits with 3 or more levels of logic. Two-level SOP/POS are immune.
+* **Simultaneous Inputs**: Assuming two inputs can change exactly simultaneously in asynchronous design. Physically impossible; leads to unpredictable behavior.
+* **Flip-Flops**: Looking for standard edge-triggered flip-flops in Huffman models. Asynchronous feedback relies on basic **latches** (cross-coupled NAND/NOR) or inherent gate delays.
+
+**Bottom-Line Summary**
+Asynchronous sequential logic abandons the synchronized cadence of a master clock, allowing systems to process data at the raw propagation speed of their underlying physical gates. While this architecture eliminates clock-skew bottlenecks and drastically reduces dynamic power consumption, it shifts the engineering burden heavily onto rigorous state assignment and hazard elimination to prevent catastrophic critical races and transient glitches, making it a specialized but critical framework for ultra-fast arbiters, low-power embedded nodes, and asynchronous wrappers in complex Systems-on-Chip.
+
+---
+
+### 3. Application (Calculations & Engineering)
+
+**Formulas**
+
+* **Fundamental Mode Timing Constraint**:
+* Equation: $t_{min\_input\_interval} > t_{max\_comb\_delay} + t_{max\_feedback\_delay}$
+* Variables: $t_{min\_input\_interval} = \text{Minimum time between input changes}$, $t_{max\_comb\_delay} = \text{Maximum combinational logic delay}$, $t_{max\_feedback\_delay} = \text{Maximum wire routing delay}$.
+* Physical Meaning: Ensures the circuit fully stabilizes before a new input vector is applied.
+
+
+* **Hazard-Free SOP (Consensus Theorem)**:
+* Equation: $AB + \overline{A}C + BC = AB + \overline{A}C$ (Note: For hazard elimination, the redundant consensus term $BC$ **must be retained** physically).
+* Meaning: Bridging adjacent K-map groupings with a redundant Prime Implicant prevents static-1 hazards during the transition of variable $A$.
+
+
+* **Shared Row State Reduction**:
+* Rule: Two rows $a$ and $b$ can be merged if, for every input column, their next states and outputs are identical, or if one contains a "don't care" condition.
+
+
+
+**Practical Use**
+
+* **Arbiter Circuits**: Resolving simultaneous bus requests in multi-core processors without waiting for a clock edge.
+* **Low-Power Embedded IoT**: Wake-up receivers using completely unclocked asynchronous logic to draw near-zero power while waiting for an RF interrupt.
+* **Speed-Independent Pipelining**: Muller C-elements driving asynchronous FIFOs (micropipelines) where data flows instantly upon availability.
+* **Switch Debouncing**: Basic SR latch (the simplest asynchronous circuit) filtering mechanical switch chatter.
+
+**Design Trade-Offs**
+
+* **Hardware Overhead vs. Reliability**: Eliminating static hazards strictly requires implementing redundant logic gates, increasing silicon area to guarantee glitch-free operation.
+* **State Assignment Matrix**: shared-row assignments reduce internal states but drastically increase the probability of critical races, necessitating extra transition states (cycles) that slow down overall performance.
+
+**High-Yield Exam Triggers**
+
+* **"No clock signal"** $\rightarrow$ **Asynchronous sequential**
+* **"One input changes at a time"** $\rightarrow$ **Fundamental mode**
+* **"Short discrete input signals"** $\rightarrow$ **Pulse mode**
+* **"Output glitch / Unequal delay"** $\rightarrow$ **Hazard**
+* **"Eliminate static hazard"** $\rightarrow$ **Add redundant prime implicants (overlap K-map groups)**
+* **"Two state variables change simultaneously"** $\rightarrow$ **Race condition**
+* **"Race causing wrong stable state"** $\rightarrow$ **Critical race**
+* **"Combinational logic + delay lines"** $\rightarrow$ **Huffman model**
+* **"Cross-coupled NOR/NAND"** $\rightarrow$ **SR Latch (fundamental async memory)**
+* **"Distance 1 assignment"** $\rightarrow$ **Race-free state assignment (Gray code)**

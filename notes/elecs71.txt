@@ -1,0 +1,147 @@
+### 1. Knowledge (Recall & Facts)
+
+**Definitions**
+
+* **Boolean Algebra**: Mathematical framework for logic circuit analysis; variables restricted to $0$ (False/Low) and $1$ (True/High).
+* **Truth Table**: Tabular representation of all possible input combinations and corresponding outputs.
+* **Minterm**: Product term containing all variables exactly once (Standard Sum-of-Products or **SOP**).
+* **Maxterm**: Sum term containing all variables exactly once (Standard Product-of-Sums or **POS**).
+* **Universal Gate**: Gate capable of implementing any Boolean function (**NAND**, **NOR**).
+* **AND Gate**: Logical multiplication; output $1$ only if **all** inputs are $1$.
+* **OR Gate**: Logical addition; output $1$ if **any** input is $1$.
+* **NOT Gate (Inverter)**: Logical complementation; output is inverse of input.
+* **XOR (Exclusive-OR)**: Inequality detector; output $1$ if inputs are **different** (odd number of $1$s).
+* **XNOR (Exclusive-NOR)**: Equality detector; output $1$ if inputs are **identical** (even number of $1$s).
+
+**Critical Numbers**
+
+* **Truth Table Rows**: $2^n$ (where $n = \text{number of input variables}$).
+* **TTL Voltage Levels (5V)**: $V_{IL(\max)} = 0.8\text{ V}$, $V_{IH(\min)} = 2.0\text{ V}$, $V_{OL(\max)} = 0.4\text{ V}$, $V_{OH(\min)} = 2.4\text{ V}$.
+* **CMOS Voltage Levels (5V)**: $V_{IL(\max)} = 1.5\text{ V}$, $V_{IH(\min)} = 3.5\text{ V}$.
+* **Noise Margin**: $\approx 0.4\text{ V}$ (Standard TTL).
+* **Fan-out**: TTL $\approx 10$ loads; CMOS $> 50$ loads (low frequency).
+* **Standard Gate Implementations**:
+* $1$ XOR gate $= 4$ NAND gates $= 5$ NOR gates.
+* $1$ XNOR gate $= 5$ NAND gates $= 4$ NOR gates.
+
+
+
+**Standards & Protocols**
+
+* **IEEE/ANSI 91-1984**: Standard for logic graphic symbols (rectangular shape symbols).
+* **MIL-STD-806B**: Distinctive shape logic symbols (spade/shield shapes universally used in exams).
+* **JEDEC JESD8-C**: Interface standard for nominal $3.3\text{ V}$ supply digital circuits.
+
+---
+
+### 2. Comprehension (Concepts & Relationships)
+
+**Visual Interpretation**
+
+* **AND Symbol**: Flat back, semi-circular front.
+* **OR Symbol**: Curved back, pointed front.
+* **Bubbles**: Indicate inversion (active-low). Found at output (NAND/NOR) or input (Negative-AND/Negative-OR).
+* **Timing Diagrams**: Horizontal axis = time, vertical = logic levels. Vertical dashed lines indicate propagation delay ($t_{pd}$) between input change and output response.
+* **Karnaugh Map (K-map)**: 2D grid representation of truth table; adjacent cells differ by exactly one variable (Gray code sequence).
+
+**Pros vs. Cons**
+
+| Architecture / Family | Pros | Cons |
+| --- | --- | --- |
+| **Sum-of-Products (SOP)** | Easy direct implementation with AND-OR logic; intuitive from truth tables. | May require more gates than optimized mixed logic. |
+| **Product-of-Sums (POS)** | Optimal for functions with many $1$s and few $0$s. | Less intuitive human readability. |
+| **TTL (Transistor-Transistor Logic)** | Fast switching speeds; robust to ESD. | High static power consumption. |
+| **CMOS (Complementary Metal-Oxide)** | Extremely low static power; high fan-out. | Sensitive to ESD; dynamic power increases with frequency. |
+
+**Exam Traps**
+
+* **Universal Gate Confusion**: XOR and XNOR are **not** universal gates; only NAND and NOR are.
+* **Bubble Pushing (De Morgan's)**: A NAND gate is physically identical to a **Negative-OR** gate (inputs inverted, OR operation). A NOR gate is a **Negative-AND**.
+* **Floating Inputs**: TTL floating input defaults to HIGH (logic $1$). CMOS floating input causes unpredictable behavior/excessive current (must be tied to $V_{DD}$ or GND).
+* **Precedence Error**: Boolean algebra order of operations is strictly: NOT, then AND, then OR.
+
+**Bottom-Line Summary**
+Boolean algebra provides the rigorous mathematical foundation required to design, simplify, and analyze digital logic circuits, reducing complex real-world control conditions into optimized binary expressions. By leveraging fundamental logic gates and universal architectures, engineers minimize hardware footprint, propagation delay, and power consumption while ensuring deterministic electrical responses. Mastery of these theorems, particularly De Morgan's laws and K-map simplification, is the non-negotiable prerequisite for advancing into sequential logic, microprocessor design, and embedded systems engineering.
+
+---
+
+### 3. Application (Calculations & Engineering)
+
+**Formulas**
+
+* **Commutative Law**:
+* Equation: $A + B = B + A$ | $A \cdot B = B \cdot A$
+* Meaning: Order of variables does not matter.
+
+
+* **Associative Law**:
+* Equation: $A + (B + C) = (A + B) + C$ | $A \cdot (B \cdot C) = (A \cdot B) \cdot C$
+* Meaning: Grouping of variables does not matter.
+
+
+* **Distributive Law**:
+* Equation: $A \cdot (B + C) = A \cdot B + A \cdot C$ | $A + (B \cdot C) = (A + B) \cdot (A + C)$
+* Meaning: Expanding expressions.
+
+
+* **Identity Law**:
+* Equation: $A + 0 = A$ | $A \cdot 1 = A$
+* Meaning: Adding $0$ or multiplying by $1$ retains the variable.
+
+
+* **Null (Annulment) Law**:
+* Equation: $A + 1 = 1$ | $A \cdot 0 = 0$
+* Meaning: Forcing output to a fixed state.
+
+
+* **Idempotent Law**:
+* Equation: $A + A = A$ | $A \cdot A = A$
+* Meaning: Redundant variables can be dropped.
+
+
+* **Complement Law**:
+* Equation: $A + \overline{A} = 1$ | $A \cdot \overline{A} = 0$
+* Meaning: A variable and its inverse cover all conditions (OR) or mutually exclude (AND).
+
+
+* **Involution Law**:
+* Equation: $\overline{\overline{A}} = A$
+* Meaning: Double inversion restores original state.
+
+
+* **Absorption Law**:
+* Equation: $A + A \cdot B = A$ | $A \cdot (A + B) = A$
+* Meaning: Eliminating redundant product/sum terms.
+
+
+* **De Morgan's Theorems**:
+* Equation 1: $\overline{A \cdot B} = \overline{A} + \overline{B}$ (NAND $\equiv$ Negative-OR)
+* Equation 2: $\overline{A + B} = \overline{A} \cdot \overline{B}$ (NOR $\equiv$ Negative-AND)
+* Meaning: Converting between AND and OR logic by breaking the bar and changing the sign.
+
+
+
+**Practical Use**
+
+* **Address Decoding**: Using logic gates (typically NAND) to select specific memory chips or I/O devices based on microprocessor address bus states.
+* **Safety Interlocks**: AND gates used in industrial controls requiring multiple conditions (e.g., Door Closed AND Guard Down AND Operator Switch Pressed) before motor activation.
+* **Arithmetic Logic Units (ALUs)**: Cascaded XOR gates for binary addition/subtraction.
+* **Multiplexers/Demultiplexers**: Routing data using structured SOP logic configurations.
+
+**Design Trade-Offs**
+
+* **Gate Count vs. Delay**: Multi-level logic reduces gate count (cost/space) but increases propagation delay ($t_{pd}$) through the circuit. Two-level logic (SOP/POS) maximizes speed but requires gates with high fan-in.
+* **CMOS Power Trade-off**: Power dissipation $P = f \cdot C \cdot V^2$. Excellent static power characteristics, but rapidly heating at high switching frequencies ($f$).
+
+**High-Yield Exam Triggers**
+
+* **"Any HIGH $\rightarrow$ HIGH"** $\rightarrow$ **OR gate**
+* **"All HIGH $\rightarrow$ HIGH"** $\rightarrow$ **AND gate**
+* **"Odd ones detector"** $\rightarrow$ **XOR gate**
+* **"Universal basic blocks"** $\rightarrow$ **NAND / NOR**
+* **"Break the line, change the sign"** $\rightarrow$ **De Morgan's Theorem**
+* **"Reduces $A + AB$ to $A$"** $\rightarrow$ **Absorption Law**
+* **"TTL floating input"** $\rightarrow$ **Logic 1 (HIGH)**
+* **"CMOS logic levels"** $\rightarrow$ **$V_{DD}$ and GND (full swing)**
+* **"NAND is equivalent to"** $\rightarrow$ **Bubbled OR (Negative-OR)**
+* **"Gray code sequence"** $\rightarrow$ **Karnaugh Map axes**
