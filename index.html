@@ -1228,6 +1228,8 @@ function renderProgress() {
     const fragment = document.createDocumentFragment();
     
     filtered.forEach((row, index) => {
+        const safeTopic = row.topic.replace(/'/g, "\\'");
+        const safeCourse = row.course.replace(/'/g, "\\'");
         const mastery = getSavedMastery(row.id);
         const tr = document.createElement('tr');
         
@@ -1238,7 +1240,7 @@ function renderProgress() {
             <td style="color:var(--text-primary);font-weight:500;font-size:0.85rem;border-right:1px solid var(--border-subtle);">${row.course}</td>
             <td style="color:var(--text-secondary);font-size:0.85rem;line-height:1.4;border-right:1px solid var(--border-subtle);">
                 <div class="flex items-center justify-between gap-4">
-                    <span onclick="openNotesModal('${row.subject}', '${row.course}', '${row.topic}')" class="cursor-pointer hover:text-blue-400 hover:underline transition-colors duration-200">${row.topic}</span>
+                    <span onclick="openNotesModal('${row.subject}', '${safeCourse}', '${safeTopic}')" class="cursor-pointer hover:text-blue-400 hover:underline transition-colors duration-200">${row.topic}</span>
                     
                     <div class="flex items-center gap-2">
                         ${isSmartSortActive && index < 5 ? `<button onclick="switchTab('pomodoro'); resetTimer(); startTimer();" title="Focus on this topic" class="w-8 h-8 shrink-0 rounded flex items-center justify-center border border-white/10 text-white/40 bg-black/20 hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/40 transition-all"><i class="fa-solid fa-play text-xs relative left-[1px]"></i></button>` : ''}
